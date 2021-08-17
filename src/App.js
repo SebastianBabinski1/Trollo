@@ -1,9 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
+import Button from './components/Button';
+import { DownloadSVG } from './svg/DownloadSVG';
 
 function App() {
   return (
     <div className="App">
+      <Button class="bg-red-400 flex" svg={DownloadSVG} text="Sample button"/>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
