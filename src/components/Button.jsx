@@ -1,9 +1,9 @@
 export default function Button(props){
     return(
         <>
-            <button class={props.class}>
+            <button class={props.buttonClass}>
                 {props.svg}
-                <span>{props.text}</span>
+                <span class={props.spanClass}>{props.text}</span>
             </button>
         </>
     )

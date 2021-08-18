@@ -1,12 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
 import Button from './components/Button';
-import { DownloadSVG } from './svg/DownloadSVG';
+import Navbar from './components/Navbar';
+import { TableSVG } from './svg/TableSVG';
 
 function App() {
   return (
     <div className="App">
-      <Button class="bg-red-400 flex" svg={DownloadSVG} text="Sample button"/>
+      <Navbar/>
+      <Button spanClass="pl-2" buttonClass="flex p-1 m-2 bg-black bg-opacity-10 rounded-md hover:bg-opacity-20" svg={TableSVG} text="Sample button"/>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
