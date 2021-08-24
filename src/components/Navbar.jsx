@@ -7,6 +7,7 @@ import { InfoSVG } from "../svg/InfoSVG"
 import { BellSVG } from "../svg/BellSVG"
 import { AdjustmentsSVG } from "../svg/Adjustments"
 
+// This variable should be removed later
 const example = 
 <div>
     <p>Second modal content was injected as element</p>

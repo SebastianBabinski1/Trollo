@@ -17,7 +17,7 @@ export default class Button extends React.Component{
                     {this.props.svg}
                     <span class={this.props.spanClass}>{this.props.text}</span>
                 </button>
-                {this.state.seen ? <Modal toggle={this.props.togglePop} modalTitle={this.props.modalTitle} modalContent={this.props.modalContent}/> : null}
+                {this.state.seen ? <Modal toggle={this.togglePop} modalTitle={this.props.modalTitle} modalContent={this.props.modalContent}/> : null}
             </>
         )
     }
