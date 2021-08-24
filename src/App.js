@@ -3,12 +3,14 @@ import './App.css';
 import Button from './components/Button';
 import Navbar from './components/Navbar';
 import { TableSVG } from './svg/TableSVG';
+import BoardHeader from './components/BoardHeader';
 
 function App() {
   return (
     <div className="App">
       <Navbar/>
       <Button spanClass="pl-2" buttonClass="flex p-1 m-2 bg-black bg-opacity-10 rounded-md hover:bg-opacity-20" svg={TableSVG} text="Sample button"/>
+      <BoardHeader tableName="Name of table"/>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -22,7 +24,7 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+       </header>
     </div>
   );
 }

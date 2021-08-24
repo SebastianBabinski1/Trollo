@@ -7,11 +7,22 @@ import { InfoSVG } from "../svg/InfoSVG"
 import { BellSVG } from "../svg/BellSVG"
 import { AdjustmentsSVG } from "../svg/Adjustments"
 
+const example = 
+<div>
+    <p>Second modal content was injected as element</p>
+</div>
+
 const leftSideContent = 
     <>
-      <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={ViewMoreSVG}/>
-      <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={HomeSVG}/>
-      <Button spanClass="pl-1" buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={TableSVG} text="Tablice"/>
+        <div>
+            <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={ViewMoreSVG} modalTitle="First modal" modalContent="First button was clicked"/>
+        </div>
+        <div>
+            <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={HomeSVG} modalTitle="Second modal" modalContent={example}/>
+        </div>
+        <div>
+            <Button spanClass="pl-1" buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={TableSVG} text="Tables"/>
+        </div>
     </>
 
 const middleContent = 
@@ -20,12 +31,20 @@ const middleContent =
     </>
 
 const rightSideContent = 
-<>
-    <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={PlusSVG}/>
-    <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={InfoSVG}/>
-    <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={BellSVG}/>
-    <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={AdjustmentsSVG}/>
-</>
+    <>
+        <div>
+            <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={PlusSVG}/>
+        </div>
+        <div>
+            <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={InfoSVG}/>
+        </div>
+        <div>
+            <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={BellSVG}/>
+        </div>
+        <div>
+            <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={AdjustmentsSVG}/>
+        </div>
+    </>
 
 export default function Navbar(props){
     return(
