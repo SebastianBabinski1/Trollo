@@ -6,23 +6,47 @@ import { PlusSVG } from "../svg/PlusSVG"
 import { InfoSVG } from "../svg/InfoSVG"
 import { BellSVG } from "../svg/BellSVG"
 import { AdjustmentsSVG } from "../svg/Adjustments"
-
-// This variable should be removed later
-const example = 
-<div>
-    <p>Second modal content was injected as element</p>
-</div>
+import ModalHeader from "./Modal/ModalHeader"
+import ModalBody from "./Modal/ModalBody"
+import Modal from "./Modal/Modal"
 
 const leftSideContent = 
     <>
         <div>
-            <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={ViewMoreSVG} modalTitle="First modal" modalContent="First button was clicked"/>
+            <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={ViewMoreSVG} >
+                <Modal>
+                    <ModalHeader>
+                        <p>This is modal header</p>
+                    </ModalHeader>
+                    <ModalBody>
+                        <p>This is modal body</p>
+                    </ModalBody>
+                </Modal>
+            </Button>
         </div>
         <div>
-            <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={HomeSVG} modalTitle="Second modal" modalContent={example}/>
+            <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={HomeSVG}>
+            <Modal>
+                    <ModalHeader>
+                        <p>Hello</p>
+                    </ModalHeader>
+                    <ModalBody>
+                        <p>World</p>
+                    </ModalBody>
+                </Modal>
+            </Button>
         </div>
         <div>
-            <Button spanClass="pl-1" buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={TableSVG} text="Tables"/>
+            <Button spanClass="pl-1" buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={TableSVG} text="Tables">
+            <Modal>
+                    <ModalHeader>
+                        <p>123</p>
+                    </ModalHeader>
+                    <ModalBody>
+                        <p>456</p>
+                    </ModalBody>
+                </Modal>
+            </Button>
         </div>
     </>
 
