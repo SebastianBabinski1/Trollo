@@ -18,7 +18,7 @@ export default class List extends React.Component{
             <div className="list-wrapper w-1/4 bg-gray-200 m-2">
                 <ListTitle title={this.props.title}/>
                 {this.handleCards(this.props.cards)}
-                <button type="button" className="bg-white rounded-md border-black border-2" onClick={()=>this.props.handleAddingCard(this.props.title, "XD")}>
+                <button type="button" className="bg-white rounded-md border-black border-2" onClick={()=>this.props.handleAddingCard(this.props.title, "WYGRANA")}>
                     Add new card
                 </button>
             </div>

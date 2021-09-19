@@ -47,8 +47,7 @@ class App extends React.Component {
     console.log(this.state)
     this.state.lists.forEach(item => {
       item.title === listTitle 
-      // ? this.setState({sampleCount: this.state.sampleCount.push({id:2, text:"XD"})})
-      ? this.setState(this.state.lists[item].cards.push({id:2, text:"XD"}))
+      ? this.setState({cards:item.cards.push({id:item.cards.length, text:cardText})})
       : console.log("Inne") 
     })
     console.log(this.state)
