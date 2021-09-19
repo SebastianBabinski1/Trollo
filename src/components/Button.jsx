@@ -12,11 +12,11 @@ export default class Button extends React.Component{
     render(){
         return(
             <>
-                <button class={this.props.buttonClass} onClick={this.togglePop}>
+                <button className={this.props.buttonClass} onClick={this.togglePop}>
                     {this.props.svg}
-                    <span class={this.props.spanClass}>{this.props.text}</span>
+                    <span className={this.props.spanClass}>{this.props.text}</span>
+                    {this.state.seen ? this.props.children : null}
                 </button>
-                {this.state.seen ? this.props.children : null}
             </>
         )
     }

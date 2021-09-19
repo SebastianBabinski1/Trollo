@@ -26,7 +26,7 @@ const leftSideContent =
         </div>
         <div>
             <Button buttonClass="flex p-1 m-2 bg-white bg-opacity-20 rounded-md hover:bg-opacity-10" svg={HomeSVG}>
-            <Modal>
+                <Modal>
                     <ModalHeader>
                         <p>Hello</p>
                     </ModalHeader>
@@ -73,10 +73,10 @@ const rightSideContent =
 
 export default function Navbar(props){
     return(
-        <div class="flex bg-black bg-opacity-50 text-white">
-            <div class="flex">{leftSideContent}</div>
-            <div class="flex m-auto opacity-50 hover:opacity-100">{middleContent}</div>
-            <div class="flex">{rightSideContent}</div>
+        <div className="flex bg-black bg-opacity-50 text-white">
+            <div className="flex">{leftSideContent}</div>
+            <div className="flex m-auto opacity-50 hover:opacity-100">{middleContent}</div>
+            <div className="flex">{rightSideContent}</div>
         </div>
     )
 }
