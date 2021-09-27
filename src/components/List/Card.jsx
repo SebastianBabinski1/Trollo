@@ -1,9 +1,12 @@
 import React from "react"
 
-export default function Card(props){
-    return(
-        <div>
-            <p>{props.text}</p>
-        </div>
-    )
+export default class Card extends React.Component{
+    render(){
+        return(
+            <div className="relative">
+                <p className="bg-gray-100 rounded-md m-2">{this.props.text}</p>
+                <button className="absolute right-6 top-0" onClick={() => this.props.handleRemovingCard(this.props.cardID, this.props.listID)}>x</button>
+            </div>
+        )
+    }
 }

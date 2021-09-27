@@ -1,7 +1,21 @@
 import React from "react"
 
-export default function ListTitle(props){
-    return(
-        <span className="border-b-2 border-black">{props.title}</span>
-    )
+export default class ListTitle2 extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            title:''
+        }
+        this.handleTitleChange = this.handleTitleChange.bind(this)
+    }
+    handleTitleChange(event){
+        this.setState({title:event.target.value})
+    }
+    render(){
+        return(
+            <div>
+                <input className="bg-gray-200 max-h-8 p-2" placeholder="Add title of list" onChange={this.handleTitleChange}/>
+            </div>
+        )
+    }
 }
