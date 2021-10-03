@@ -1,19 +1,30 @@
 import React from "react";
+import { useDrag } from "react-dnd";
 
-export default class Card extends React.Component {
-  render() {
-    return (
-      <div className="relative">
-        <p className="bg-white rounded-md m-2 p-1">{this.props.text}</p>
-        <button
-          className="absolute right-6 top-0"
-          onClick={() =>
-            this.props.handleRemovingCard(this.props.cardID, this.props.listID)
-          }
-        >
-          x
-        </button>
-      </div>
-    );
-  }
-}
+const Card = (props) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: "card",
+    item: { id: props.cardID },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
+  return (
+    <div
+      className="relative"
+      style={{ border: isDragging ? "5px solid pink" : "0px" }}
+      ref={drag}
+    >
+      <p className="bg-white rounded-md m-2 p-1">{props.text}</p>
+      <button
+        className="absolute right-6 top-0"
+        onClick={() => props.handleRemovingCard(props.cardID, props.listID)}
+      >
+        x
+      </button>
+    </div>
+  );
+};
+
+export default Card;

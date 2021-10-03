@@ -1,6 +1,7 @@
 import React from "react";
 import ListTitle from "./ListTitle";
 import Card from "./Card";
+import SomeContainer from "../SomeContainer";
 
 export default class List extends React.Component {
   constructor(props) {
@@ -53,6 +54,7 @@ export default class List extends React.Component {
           />
           <input className="p-1 rounded-md shadow-md" type="submit" value="+" />
         </form>
+        <SomeContainer />
       </div>
     );
   }

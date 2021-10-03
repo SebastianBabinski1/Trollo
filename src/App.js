@@ -4,7 +4,10 @@
 // import BoardHeader from './components/BoardHeader';
 import List from "./components/List/List.jsx";
 import React from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
+// Here u must make it function component and make dnd drop logic
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -121,23 +124,25 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App h-screen bg-red-100">
-        <div className="App-header">
-          {/* Here u must do smth with svg files, cause there are errors */}
-          {/* <Navbar/> */}
-          {/* <Button spanClass="pl-2" buttonClass="flex p-1 m-2 bg-black bg-opacity-10 rounded-md hover:bg-opacity-20" svg={TableSVG} text="Sample button"/> */}
-          {/* <BoardHeader tableName="Name of table"/> */}
+      <DndProvider backend={HTML5Backend}>
+        <div className="App h-screen bg-red-100">
+          <div className="App-header">
+            {/* Here u must do smth with svg files, cause there are errors */}
+            {/* <Navbar/> */}
+            {/* <Button spanClass="pl-2" buttonClass="flex p-1 m-2 bg-black bg-opacity-10 rounded-md hover:bg-opacity-20" svg={TableSVG} text="Sample button"/> */}
+            {/* <BoardHeader tableName="Name of table"/> */}
+          </div>
+          <div className="App-content flex">
+            {this.handleLists()}
+            <button
+              className="border-2 px-2 rounded-r-md shadow-md w-1/4 h-8 mt-2 bg-white opacity-70"
+              onClick={this.handleAddingList}
+            >
+              Add new list
+            </button>
+          </div>
         </div>
-        <div className="App-content flex">
-          {this.handleLists()}
-          <button
-            className="border-2 px-2 rounded-r-md shadow-md w-1/4 h-8 mt-2 bg-white opacity-70"
-            onClick={this.handleAddingList}
-          >
-            Add new list
-          </button>
-        </div>
-      </div>
+      </DndProvider>
     );
   }
 }
