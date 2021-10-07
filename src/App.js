@@ -6,36 +6,37 @@ import List from "./components/List/List.jsx";
 import React, { useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import ListTitleForm from "./components/List/ListTitleForm.jsx";
 
-// Here u must make it function component and make dnd drop logic
 const App = () => {
+  const [showComponent, setShowComponent] = useState(false);
   const [lists, setLists] = useState([
     {
       title: "First Episode",
       id: 0,
       cards: [
-        {
-          id: 0,
-          text: "Im a first card of first list",
-        },
-        {
-          id: 1,
-          text: "Im a second card of first list",
-        },
+        // {
+        //   id: 0,
+        //   text: "Im a first card of first list",
+        // },
+        // {
+        //   id: 1,
+        //   text: "Im a second card of first list",
+        // },
       ],
     },
     {
       title: "Second Episode",
       id: 1,
       cards: [
-        {
-          id: 0,
-          text: "Im a first card of second list",
-        },
-        {
-          id: 1,
-          text: "Im a second card of second list",
-        },
+        // {
+        //   id: 0,
+        //   text: "Im a first card of second list",
+        // },
+        // {
+        //   id: 1,
+        //   text: "Im a second card of second list",
+        // },
       ],
     },
   ]);
@@ -51,18 +52,22 @@ const App = () => {
       return calculatedID;
     };
 
-    lists.forEach((item, index) => {
-      if (item.id === listID) {
-        let newArray = [...lists];
-        let newCards = lists[index].cards.concat({
-          id: handleCardCounter(item),
-          text: cardText,
-        });
-        newArray[index].cards = newCards;
-        setLists(newArray);
-      }
-    });
+    if (cardText !== "") {
+      lists.forEach((item, index) => {
+        if (item.id === listID) {
+          let newArray = [...lists];
+          let newCards = lists[index].cards.concat({
+            id: handleCardCounter(item),
+            text: cardText,
+          });
+          newArray[index].cards = newCards;
+          setLists(newArray);
+        }
+      });
+    }
   };
+
+  //  #1, here u should check why after droping card all list is removing
 
   const handleRemovingCard = (cardID, listID) => {
     lists.forEach((item, indexofArray) => {
@@ -73,6 +78,8 @@ const App = () => {
             let cardsAfterRemoving = item.cards;
             cardsAfterRemoving.splice(indexofCard, 1);
             newArray[indexofArray].cards = cardsAfterRemoving;
+            console.log(newArray);
+            console.log(cardsAfterRemoving);
             setLists(newArray);
           }
         });
@@ -80,7 +87,7 @@ const App = () => {
     });
   };
 
-  const handleAddingList = () => {
+  const handleAddingList = (title) => {
     const handleListCounter = () => {
       let calculatedID = 0;
       lists.forEach((list) => {
@@ -91,17 +98,24 @@ const App = () => {
       return calculatedID;
     };
 
-    setLists([
-      ...lists,
-      {
-        title: "",
-        id: handleListCounter(),
-        cards: [],
-      },
-    ]);
+    if (title !== "") {
+      setLists([
+        ...lists,
+        {
+          title: title,
+          id: handleListCounter(),
+          cards: [],
+        },
+      ]);
+    }
+  };
+
+  const handleShowingTitleForm = () => {
+    setShowComponent(!showComponent);
   };
 
   const handleLists = () => {
+    debugger;
     const tableOfLists = [];
     Array.from(lists).forEach((item) => {
       tableOfLists.push(
@@ -129,12 +143,20 @@ const App = () => {
         </div>
         <div className="App-content flex">
           {handleLists()}
-          <button
-            className="border-2 px-2 rounded-r-md shadow-md w-1/4 h-8 mt-2 bg-white opacity-70"
-            onClick={handleAddingList}
-          >
-            Add new list
-          </button>
+          <div className="w-1/4">
+            <button
+              className="border-2 px-2 rounded-r-md shadow-md w-full h-8 mt-2 bg-white opacity-70"
+              onClick={handleShowingTitleForm}
+            >
+              Add new list
+            </button>
+            {showComponent ? (
+              <ListTitleForm
+                handleAddingList={handleAddingList}
+                handleShowingTitleForm={handleShowingTitleForm}
+              />
+            ) : null}
+          </div>
         </div>
       </div>
     </DndProvider>
