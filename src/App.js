@@ -1,165 +1,101 @@
-// import Button from './components/Button';
-// import Navbar from './components/Navbar';
-// import { TableSVG } from './svg/TableSVG';
-// import BoardHeader from './components/BoardHeader';
-import List from "./components/List/List.jsx";
 import React, { useState } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import ListTitleForm from "./components/List/ListTitleForm.jsx";
+import Footer from "./components/Footer";
+import UserBoard from "./components/UserBoard";
+import UserSelection from "./components/UserSelection";
 
 const App = () => {
-  const [showComponent, setShowComponent] = useState(false);
-  const [lists, setLists] = useState([
+  const [userSelection, setUserSelection] = useState(true);
+  const [choosedUser, setChoosedUser] = useState();
+  const [users, setUsers] = useState([
     {
-      title: "First Episode",
+      name: "Henry",
       id: 0,
-      cards: [
-        // {
-        //   id: 0,
-        //   text: "Im a first card of first list",
-        // },
-        // {
-        //   id: 1,
-        //   text: "Im a second card of first list",
-        // },
+      avatar:
+        "https://cdn-icons.flaticon.com/png/512/3445/premium/3445119.png?token=exp=1634287113~hmac=8cd92ba22feac2a46dee51bd4a1bbe6e",
+    },
+    {
+      name: "Kukasz",
+      id: 1,
+      avatar:
+        "https://scontent-waw1-1.xx.fbcdn.net/v/t1.18169-9/14925305_1132094750203954_6291766469642043944_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=174925&_nc_ohc=bvQJrIup1C8AX9iD5v3&_nc_ht=scontent-waw1-1.xx&oh=19d54978ab7afb1b87c9571bed717c65&oe=618D8EF4",
+    },
+  ]);
+
+  const [usersData, setUsersData] = useState([
+    {
+      userID: 0,
+      lists: [
+        {
+          title: "First User",
+          id: 0,
+          cards: [],
+        },
+        {
+          title: "Something",
+          id: 1,
+          cards: [],
+        },
       ],
     },
     {
-      title: "Second Episode",
-      id: 1,
-      cards: [
-        // {
-        //   id: 0,
-        //   text: "Im a first card of second list",
-        // },
-        // {
-        //   id: 1,
-        //   text: "Im a second card of second list",
-        // },
+      userID: 1,
+      lists: [
+        {
+          title: "Second User",
+          id: 0,
+          cards: [],
+        },
+        {
+          title: "Something",
+          id: 1,
+          cards: [],
+        },
       ],
     },
   ]);
 
-  const handleAddingCard = (listID, cardText) => {
-    const handleCardCounter = (list) => {
-      let calculatedID = 0;
-      list.cards.forEach((card) => {
-        if (card.id >= calculatedID) {
-          calculatedID = card.id + 1;
+  const updateUsers = (newUser, avatar) => {
+    const handleID = () => {
+      let newID = 0;
+      users.forEach((user) => {
+        if (user.id >= newID) {
+          newID = newID + 1;
         }
       });
-      return calculatedID;
+      return newID;
     };
-
-    if (cardText !== "") {
-      lists.forEach((item, index) => {
-        if (item.id === listID) {
-          let newArray = [...lists];
-          let newCards = lists[index].cards.concat({
-            id: handleCardCounter(item),
-            text: cardText,
-          });
-          newArray[index].cards = newCards;
-          setLists(newArray);
-        }
-      });
-    }
+    const newID = handleID();
+    setUsers((prevState) => [
+      ...prevState,
+      { name: newUser, id: newID, avatar: avatar },
+    ]);
+    setUsersData((prevState) => [...prevState, { userID: newID, lists: [] }]);
+    console.log(users);
   };
 
-  //  #1, here u should check why after droping card all list is removing
-
-  const handleRemovingCard = (cardID, listID) => {
-    lists.forEach((item, indexofArray) => {
-      if (item.id === listID) {
-        item.cards.forEach((card, indexofCard) => {
-          if (card.id === cardID) {
-            let newArray = [...lists];
-            let cardsAfterRemoving = item.cards;
-            cardsAfterRemoving.splice(indexofCard, 1);
-            newArray[indexofArray].cards = cardsAfterRemoving;
-            console.log(newArray);
-            console.log(cardsAfterRemoving);
-            setLists(newArray);
-          }
-        });
+  const handleSelectedUser = () => {
+    const selectedUser = [];
+    usersData.forEach((user) => {
+      if (user.userID === choosedUser.id) {
+        selectedUser.push(<UserBoard lists={user.lists} />);
       }
     });
-  };
-
-  const handleAddingList = (title) => {
-    const handleListCounter = () => {
-      let calculatedID = 0;
-      lists.forEach((list) => {
-        if (list.id >= calculatedID) {
-          calculatedID = list.id + 1;
-        }
-      });
-      return calculatedID;
-    };
-
-    if (title !== "") {
-      setLists([
-        ...lists,
-        {
-          title: title,
-          id: handleListCounter(),
-          cards: [],
-        },
-      ]);
-    }
-  };
-
-  const handleShowingTitleForm = () => {
-    setShowComponent(!showComponent);
-  };
-
-  const handleLists = () => {
-    debugger;
-    const tableOfLists = [];
-    Array.from(lists).forEach((item) => {
-      tableOfLists.push(
-        <List
-          key={item.id}
-          listID={item.id}
-          cards={item.cards}
-          title={item.title}
-          handleAddingCard={handleAddingCard}
-          handleRemovingCard={handleRemovingCard}
-        />
-      );
-    });
-    return tableOfLists;
+    return selectedUser;
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="App h-screen bg-red-100">
-        <div className="App-header">
-          {/* Here u must do smth with svg files, cause there are errors */}
-          {/* <Navbar/> */}
-          {/* <Button spanClass="pl-2" buttonClass="flex p-1 m-2 bg-black bg-opacity-10 rounded-md hover:bg-opacity-20" svg={TableSVG} text="Sample button"/> */}
-          {/* <BoardHeader tableName="Name of table"/> */}
-        </div>
-        <div className="App-content flex">
-          {handleLists()}
-          <div className="w-1/4">
-            <button
-              className="border-2 px-2 rounded-r-md shadow-md w-full h-8 mt-2 bg-white opacity-70"
-              onClick={handleShowingTitleForm}
-            >
-              Add new list
-            </button>
-            {showComponent ? (
-              <ListTitleForm
-                handleAddingList={handleAddingList}
-                handleShowingTitleForm={handleShowingTitleForm}
-              />
-            ) : null}
-          </div>
-        </div>
-      </div>
-    </DndProvider>
+    <div className="h-screen relative">
+      {userSelection ? (
+        <UserSelection
+          setChoosedUser={setChoosedUser}
+          setUserSelection={setUserSelection}
+          updateUsers={updateUsers}
+          users={users}
+        />
+      ) : null}
+      {choosedUser ? handleSelectedUser() : null}
+      <Footer />
+    </div>
   );
 };
 

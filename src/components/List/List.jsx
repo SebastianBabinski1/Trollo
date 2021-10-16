@@ -18,7 +18,6 @@ const List = (props) => {
 
   const handleDND = (cardID, cardText, listID) => {
     props.handleAddingCard(props.listID, cardText);
-    // handleRemovingCard is not working right now
     props.handleRemovingCard(cardID, listID);
   };
 
@@ -50,14 +49,14 @@ const List = (props) => {
 
   return (
     <div
-      className="list-wrapper w-1/4 bg-gray-200 m-2 h-full border-2 border-gray-400 rounded-md"
+      className="list-wrapper w-1/5 bg-gray-200 m-2 h-full border-2 border-gray-300 rounded-md"
       ref={drop}
     >
       <ListTitle title={props.title} />
       {handleCards(props.cards)}
       <form onSubmit={handleSubmit} className="flex justify-center">
         <input
-          className="mx-2 my-2 w-3/4"
+          className="mx-2 my-2"
           type="text"
           value={value}
           onChange={handleChange}

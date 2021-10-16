@@ -17,20 +17,18 @@ const Card = (props) => {
     <div
       className="relative"
       ref={drag}
-      hover={() => setHover(!hover)}
-      // Here u must change smth, cause its not working good
-      onMouseOver={() => setHover(!hover)}
-      onMouseLeave={() => setHover(!hover)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
       <p
-        className="bg-white rounded-md m-2 p-1"
+        className="bg-white rounded-md m-2 py-1 pl-2 pr-8 break-words border-2 border-gray-300"
         style={{ boxShadow: isDragging ? "0 0 0.5em" : "0px" }}
       >
         {props.text}
       </p>
       <button
-        className="delete-card absolute right-6 top-0"
-        // style={{ visibility: hover ? "visible" : "hidden" }}
+        className="delete-card absolute right-6 top-1"
+        style={{ visibility: hover ? "visible" : "hidden" }}
         onClick={() => props.handleRemovingCard(props.cardID, props.listID)}
       >
         x
