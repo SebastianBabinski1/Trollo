@@ -1,23 +1,22 @@
-import React from "react"
+import React from "react";
+import { useState } from "react/cjs/react.development";
 
-export default class Button extends React.Component{
-    state = {
-        seen: false
-        };
-    togglePop = () => {
-            this.setState({
-                seen: !this.state.seen
-            });
-        };
-    render(){
-        return(
-            <>
-                <button className={this.props.buttonClass} onClick={this.togglePop}>
-                    {this.props.svg}
-                    <span className={this.props.spanClass}>{this.props.text}</span>
-                    {this.state.seen ? this.props.children : null}
-                </button>
-            </>
-        )
-    }
-}
+const Button = (props) => {
+  const [visible, setVisible] = useState(false);
+
+  const togglePop = () => {
+    setVisible(!visible);
+    console.log(visible);
+  };
+  return (
+    <>
+      <button className={props.buttonClass} onClick={() => togglePop()}>
+        {props.svg}
+        <span className={props.spanClass}>{props.text}</span>
+        {visible ? props.children : null}
+      </button>
+    </>
+  );
+};
+
+export default Button;

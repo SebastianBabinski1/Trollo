@@ -14,10 +14,10 @@ const App = () => {
         "https://cdn-icons.flaticon.com/png/512/3445/premium/3445119.png?token=exp=1634287113~hmac=8cd92ba22feac2a46dee51bd4a1bbe6e",
     },
     {
-      name: "Kukasz",
+      name: "Kitty",
       id: 1,
       avatar:
-        "https://scontent-waw1-1.xx.fbcdn.net/v/t1.18169-9/14925305_1132094750203954_6291766469642043944_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=174925&_nc_ohc=bvQJrIup1C8AX9iD5v3&_nc_ht=scontent-waw1-1.xx&oh=19d54978ab7afb1b87c9571bed717c65&oe=618D8EF4",
+        "https://cdn-icons.flaticon.com/png/512/2138/premium/2138230.png?token=exp=1634398172~hmac=444077912c2ac95d50c5e929947686fa",
     },
   ]);
 
@@ -54,6 +54,15 @@ const App = () => {
     },
   ]);
 
+  const handleListUpdate = (userID, newLists) => {
+    const stateCopy = [...usersData];
+    const matchingIndex = stateCopy.findIndex((item) => item.userID === userID);
+
+    stateCopy[matchingIndex].lists = newLists;
+
+    setUsersData(stateCopy);
+  };
+
   const updateUsers = (newUser, avatar) => {
     const handleID = () => {
       let newID = 0;
@@ -70,21 +79,27 @@ const App = () => {
       { name: newUser, id: newID, avatar: avatar },
     ]);
     setUsersData((prevState) => [...prevState, { userID: newID, lists: [] }]);
-    console.log(users);
   };
 
   const handleSelectedUser = () => {
     const selectedUser = [];
     usersData.forEach((user) => {
       if (user.userID === choosedUser.id) {
-        selectedUser.push(<UserBoard lists={user.lists} />);
+        selectedUser.push(
+          <UserBoard
+            userID={user.userID}
+            handleListUpdate={handleListUpdate}
+            key={0}
+            lists={user.lists}
+          />
+        );
       }
     });
     return selectedUser;
   };
 
   return (
-    <div className="h-screen relative">
+    <div className="h-screen bg-mountains bg-center bg-cover flex flex-col">
       {userSelection ? (
         <UserSelection
           setChoosedUser={setChoosedUser}

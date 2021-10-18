@@ -4,6 +4,7 @@ import Card from "./Card";
 import { useDrop } from "react-dnd";
 
 const List = (props) => {
+  console.log(props.test);
   const [value, setValue] = useState("");
 
   const [{ isOver }, drop] = useDrop(() => ({
@@ -17,7 +18,12 @@ const List = (props) => {
   //  #2, here u should check why after droping card all list is removing
 
   const handleDND = (cardID, cardText, listID) => {
+    // console.log(props.lists);
+    // console.log("cardID: " + cardID);
+    // console.log("cardText: " + cardText);
+    // console.log("listID: " + listID);
     props.handleAddingCard(props.listID, cardText);
+    // here must be smth wrong, cause when state is updating then while new list is rendering smths going wrong, and finally list is not adding
     props.handleRemovingCard(cardID, listID);
   };
 
@@ -31,7 +37,7 @@ const List = (props) => {
     event.preventDefault();
   };
 
-  const handleCards = (cards) => {
+  const handleCardsRendering = (cards) => {
     const tableOfCards = [];
     cards.forEach((item) => {
       tableOfCards.push(
@@ -53,7 +59,7 @@ const List = (props) => {
       ref={drop}
     >
       <ListTitle title={props.title} />
-      {handleCards(props.cards)}
+      {handleCardsRendering(props.cards)}
       <form onSubmit={handleSubmit} className="flex justify-center">
         <input
           className="mx-2 my-2"

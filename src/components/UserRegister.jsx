@@ -32,8 +32,10 @@ const UserRegister = (props) => {
       <img
         alt="Farmer"
         src={props.src}
-        className={`w-24 rounded-full ring-gray-500 ring-1 hover:bg-red-100 m-4 ${
-          image.active === true && image.src === props.src ? "bg-white" : null
+        className={`w-24 rounded-full hover:bg-gray-300 m-4 ${
+          image.active === true && image.src === props.src
+            ? "bg-white ring-2 ring-black"
+            : null
         }`}
         onClick={() => handleChoose(props.src)}
       />
@@ -42,7 +44,7 @@ const UserRegister = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label className="flex flex-col items-center m-4 bg-blue-100 border-2 border-gray-400 rounded-md w-1/2 mx-auto">
+      <label className="flex flex-col items-center m-4 bg-white border-2 border-gray-500 rounded-md p-2 bg-opacity-80">
         <p className="text-lg mt-2">
           You dont have an account yet? Please type your name and choose avatar:
         </p>

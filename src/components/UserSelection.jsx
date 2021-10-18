@@ -1,4 +1,5 @@
 import React from "react";
+import Navbar from "./Navbar";
 import UserRegister from "./UserRegister";
 
 const UserSelection = (props) => {
@@ -6,7 +7,7 @@ const UserSelection = (props) => {
     const tableOfUsers = [];
     users.forEach((user) => {
       tableOfUsers.push(
-        <div>
+        <div key={user.id} className="mx-auto">
           <button
             onClick={() => {
               props.setChoosedUser({
@@ -22,7 +23,7 @@ const UserSelection = (props) => {
             <img
               alt="Farmer"
               src={user.avatar}
-              className="w-20 rounded-full ring-gray-500 ring-1"
+              className="w-20 rounded-full ring-white ring-1"
             />
           </button>
         </div>
@@ -32,11 +33,25 @@ const UserSelection = (props) => {
   };
 
   return (
-    <div className="h-screen bg-red-100 justify-center">
-      <p className="flex justify-center">Choose user:</p>
-      <div className="flex justify-center">{handleButtons(props.users)}</div>
-      <UserRegister updateUsers={props.updateUsers} />
-    </div>
+    <>
+      <Navbar />
+      <div className="flex flex-grow">
+        <div className="bg-black w-1/6 bg-opacity-50">
+          <p className="flex justify-center text-white">Choose user:</p>
+          <div className="flex flex-col text-white">
+            {handleButtons(props.users)}
+          </div>
+        </div>
+        <div className=" w-full">
+          <p className="text-white text-6xl  text-right my-16 mr-6">
+            Make your life easier with planning
+          </p>
+          <div className="w-1/2 mx-auto">
+            <UserRegister updateUsers={props.updateUsers} />
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
