@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="bg-black bg-opacity-50 bottom-0 w-full">
+    <div className="bg-black bg-opacity-50 w-full">
       <p className="text-center text-white p-1">
         © Copyright by Trollo Inc. All Rights Reserved.
       </p>

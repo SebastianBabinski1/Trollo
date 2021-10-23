@@ -4,28 +4,22 @@ import Card from "./Card";
 import { useDrop } from "react-dnd";
 
 const List = (props) => {
-  console.log(props.test);
   const [value, setValue] = useState("");
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) => handleDND(item.id, item.text, item.listID),
+    drop: (item) =>
+      props.handleDND(
+        props.userID,
+        item.listID,
+        props.listID,
+        item.text,
+        item.id
+      ),
     collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
+      isOver: !!!monitor.isOver(),
     }),
   }));
-
-  //  #2, here u should check why after droping card all list is removing
-
-  const handleDND = (cardID, cardText, listID) => {
-    // console.log(props.lists);
-    // console.log("cardID: " + cardID);
-    // console.log("cardText: " + cardText);
-    // console.log("listID: " + listID);
-    props.handleAddingCard(props.listID, cardText);
-    // here must be smth wrong, cause when state is updating then while new list is rendering smths going wrong, and finally list is not adding
-    props.handleRemovingCard(cardID, listID);
-  };
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -55,11 +49,17 @@ const List = (props) => {
 
   return (
     <div
-      className="list-wrapper w-1/5 bg-gray-200 m-2 h-full border-2 border-gray-300 rounded-md"
+      className="list-wrapper flex-shrink-0 w-1/5 bg-gray-200 m-2 border-2 border-gray-300 rounded-md"
       ref={drop}
     >
-      <ListTitle title={props.title} />
-      {handleCardsRendering(props.cards)}
+      <ListTitle
+        title={props.title}
+        handleRemovingList={props.handleRemovingList}
+        listID={props.listID}
+      />
+      <div className="overflow-y-scroll max-h-96">
+        {handleCardsRendering(props.cards)}
+      </div>
       <form onSubmit={handleSubmit} className="flex justify-center">
         <input
           className="mx-2 my-2"

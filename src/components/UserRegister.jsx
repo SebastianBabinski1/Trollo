@@ -32,7 +32,7 @@ const UserRegister = (props) => {
       <img
         alt="Farmer"
         src={props.src}
-        className={`w-24 rounded-full hover:bg-gray-300 m-4 ${
+        className={`w-24 rounded-full hover:bg-gray-300 m-4 cursor-pointer ${
           image.active === true && image.src === props.src
             ? "bg-white ring-2 ring-black"
             : null
@@ -56,10 +56,10 @@ const UserRegister = (props) => {
           placeholder="Your name..."
         />
         <div className="flex">
-          <Avatar src="https://cdn-icons.flaticon.com/png/512/3445/premium/3445119.png?token=exp=1634287113~hmac=8cd92ba22feac2a46dee51bd4a1bbe6e" />
-          <Avatar src="https://cdn-icons.flaticon.com/png/512/2138/premium/2138230.png?token=exp=1634398172~hmac=444077912c2ac95d50c5e929947686fa" />
+          <Avatar src="https://cdn-icons.flaticon.com/png/512/3445/premium/3445119.png?token=exp=1634890004~hmac=9cba3c3d469dd9c5d4d21c0ab5f3f96b" />
+          <Avatar src="https://cdn-icons.flaticon.com/png/512/2138/premium/2138230.png?token=exp=1634891953~hmac=fe65ac14bf7c857beb90f0b1c8437c96" />
           <Avatar src="https://cdn-icons-png.flaticon.com/512/949/949635.png" />
-          <Avatar src="https://cdn-icons.flaticon.com/png/512/2295/premium/2295142.png?token=exp=1634398249~hmac=d4d6d7592fc919c5ff685ab78e89a4f1" />
+          <Avatar src="https://cdn-icons.flaticon.com/png/512/2295/premium/2295142.png?token=exp=1634891771~hmac=841b86d65cc2c51baf02d66aeea35bda" />
         </div>
       </label>
     </form>

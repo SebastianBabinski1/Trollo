@@ -1,13 +1,14 @@
 import React from "react";
 import Navbar from "./Navbar";
 import UserRegister from "./UserRegister";
+import Footer from "../components/Footer";
 
 const UserSelection = (props) => {
   const handleButtons = (users) => {
     const tableOfUsers = [];
     users.forEach((user) => {
       tableOfUsers.push(
-        <div key={user.id} className="mx-auto">
+        <div key={user.id} className="rounded-md hover:bg-gray-200">
           <button
             onClick={() => {
               props.setChoosedUser({
@@ -17,14 +18,10 @@ const UserSelection = (props) => {
               });
               props.setUserSelection(false);
             }}
-            className="m-2"
+            className="p-4 mx-auto flex"
           >
-            {user.name}
-            <img
-              alt="Farmer"
-              src={user.avatar}
-              className="w-20 rounded-full ring-white ring-1"
-            />
+            <img alt="user" src={user.avatar} className="w-16 rounded-full" />
+            <p className="my-auto mx-4 text-xl">{user.name}</p>
           </button>
         </div>
       );
@@ -33,12 +30,12 @@ const UserSelection = (props) => {
   };
 
   return (
-    <>
+    <div className="h-screen flex flex-col">
       <Navbar />
       <div className="flex flex-grow">
-        <div className="bg-black w-1/6 bg-opacity-50">
+        <div className="bg-black w-1/6 bg-opacity-50 flex flex-col">
           <p className="flex justify-center text-white">Choose user:</p>
-          <div className="flex flex-col text-white">
+          <div className="flex flex-col rounded-md bg-white p-1">
             {handleButtons(props.users)}
           </div>
         </div>
@@ -51,7 +48,8 @@ const UserSelection = (props) => {
           </div>
         </div>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 };
 
