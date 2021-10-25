@@ -62,14 +62,14 @@ const List = (props) => {
       </div>
       <form onSubmit={handleSubmit} className="flex justify-center">
         <input
-          className="mx-2 my-2"
+          className="mx-2 my-2 rounded-md border-2 border-gray-300"
           type="text"
           value={value}
           onChange={handleChange}
           placeholder="Add new card"
         />
         <input
-          className="mb-2 mt-2 w-1/12 rounded-md shadow-md"
+          className="mb-2 mt-2 w-1/12 rounded-md border-2 border-gray-300 cursor-pointer"
           type="submit"
           value="+"
         />

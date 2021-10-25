@@ -19,7 +19,7 @@ const ListTitleForm = (props) => {
         type="text"
         placeholder="Title of new list"
         onChange={handleChange}
-        className="border-2 px-2 rounded-r-md shadow-md w-full h-8 mt-2 bg-white"
+        className="border-2 px-2 rounded-md shadow-md w-full h-8 mt-2 bg-white"
       ></input>
     </form>
   );

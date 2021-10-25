@@ -1,12 +1,11 @@
 import Navbar from "./Navbar";
-import { TableSVG } from "../svg/TableSVG";
-import BoardHeader from "./BoardHeader";
 import List from "./List/List.jsx";
 import React, { useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import ListTitleForm from "./List/ListTitleForm.jsx";
 import Footer from "./Footer";
+import SidebarNav from "./SidebarNav/SidebarNav";
 
 const UserBoard = (props) => {
   const [showComponent, setShowComponent] = useState(false);
@@ -125,21 +124,26 @@ const UserBoard = (props) => {
             setUserSelection={props.setUserSelection}
           />
         </div>
-        <div className="flex flex-grow items-start overflow-x-scroll">
-          {handleLists()}
-          <div className="w-1/5 flex-shrink-0">
-            <button
-              className="border-2 px-2 rounded-md shadow-md w-full h-8 mt-2 bg-white opacity-70"
-              onClick={handleShowingTitleForm}
-            >
-              Add new list
-            </button>
-            {showComponent ? (
-              <ListTitleForm
-                handleAddingList={handleAddingList}
-                handleShowingTitleForm={handleShowingTitleForm}
-              />
-            ) : null}
+        <div className="flex flex-grow">
+          <div className="flex-shrink-0 flex">
+            <SidebarNav />
+          </div>
+          <div className="flex flex-grow items-start overflow-x-scroll">
+            {handleLists()}
+            <div className="w-1/5 flex-shrink-0">
+              <button
+                className="border-2 px-2 rounded-md shadow-md w-full h-8 mt-2 bg-white opacity-70"
+                onClick={handleShowingTitleForm}
+              >
+                Add new list
+              </button>
+              {showComponent ? (
+                <ListTitleForm
+                  handleAddingList={handleAddingList}
+                  handleShowingTitleForm={handleShowingTitleForm}
+                />
+              ) : null}
+            </div>
           </div>
         </div>
         <Footer />
