@@ -10,14 +10,12 @@ const App = () => {
     {
       name: "Henry",
       id: 0,
-      avatar:
-        "https://cdn-icons.flaticon.com/png/512/3445/premium/3445119.png?token=exp=1634890004~hmac=9cba3c3d469dd9c5d4d21c0ab5f3f96b",
+      avatar: "https://www.svgrepo.com/show/125/car.svg",
     },
     {
-      name: "Kitty",
+      name: "Martin",
       id: 1,
-      avatar:
-        "https://cdn-icons.flaticon.com/png/512/4442/premium/4442266.png?token=exp=1634890072~hmac=16211a77a22354e3fdae270ab0c8b361",
+      avatar: "https://www.svgrepo.com/show/20920/man.svg",
     },
   ]);
 
@@ -53,6 +51,22 @@ const App = () => {
       ],
     },
   ]);
+
+  const handleRemovingUser = (userID) => {
+    const usersCopy = [...users];
+    const matchingUserIndex = usersCopy.findIndex((item) => item.id === userID);
+    const updatedUsers = usersCopy.slice(matchingUserIndex, 1);
+
+    const usersDataCopy = [...usersData];
+    const matchingUsersDataIndex = usersDataCopy.findIndex(
+      (item) => item.userID === userID
+    );
+    const updatedUsersData = usersDataCopy.slice(matchingUsersDataIndex, 1);
+
+    // setUsers(updatedUsers);
+    // setUsersData(updatedUsersData);
+    // Somethings here not
+  };
 
   const handleListUpdate = (userID, newLists) => {
     const stateCopy = [...usersData];
@@ -136,6 +150,8 @@ const App = () => {
       if (user.userID === choosedUser.id) {
         selectedUser.push(
           <UserBoard
+            users={users}
+            setChoosedUser={setChoosedUser}
             setUserSelection={setUserSelection}
             userContent={userContent}
             handleDND={handleDND}
@@ -158,6 +174,7 @@ const App = () => {
           setUserSelection={setUserSelection}
           updateUsers={updateUsers}
           users={users}
+          handleRemovingUser={handleRemovingUser}
         />
       ) : (
         handleSelectedUser()

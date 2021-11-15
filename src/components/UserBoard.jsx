@@ -118,17 +118,20 @@ const UserBoard = (props) => {
     <DndProvider backend={HTML5Backend}>
       <div className="h-screen flex flex-col max-w-full">
         <div>
-          {/* Here u must do smth with svg files, cause there are errors */}
           <Navbar
             userContent={props.userContent}
             setUserSelection={props.setUserSelection}
           />
         </div>
         <div className="flex flex-grow">
-          <div className="flex-shrink-0 flex">
-            <SidebarNav />
+          <div className="flex">
+            <SidebarNav
+              users={props.users}
+              setChoosedUser={props.setChoosedUser}
+              setUserSelection={props.setUserSelection}
+            />
           </div>
-          <div className="flex flex-grow items-start overflow-x-scroll">
+          <div className="flex flex-grow items-start overflow-x-scroll px-6">
             {handleLists()}
             <div className="w-1/5 flex-shrink-0">
               <button

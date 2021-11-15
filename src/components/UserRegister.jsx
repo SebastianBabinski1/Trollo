@@ -11,6 +11,10 @@ const UserRegister = (props) => {
   const handleSubmit = (event) => {
     if ((value === "") | (image.src === "")) {
       alert("Please choose name and image");
+    } else if (props.usersLength > 4) {
+      alert(
+        "Ups... maximum number of users is 5. Please remove one user and try again"
+      );
     } else {
       props.updateUsers(value, image.src);
       setValue("");
@@ -48,6 +52,7 @@ const UserRegister = (props) => {
         <p className="text-lg mt-2">
           You dont have an account yet? Please type your name and choose avatar:
         </p>
+
         <input
           onChange={handleChange}
           value={value}
@@ -55,12 +60,18 @@ const UserRegister = (props) => {
           className="w-1/3 m-4 border-2 border-gray-400 rounded-md px-2 py-1"
           placeholder="Your name..."
         />
+
         <div className="flex">
-          <Avatar src="https://cdn-icons.flaticon.com/png/512/3445/premium/3445119.png?token=exp=1634890004~hmac=9cba3c3d469dd9c5d4d21c0ab5f3f96b" />
-          <Avatar src="https://cdn-icons.flaticon.com/png/512/2138/premium/2138230.png?token=exp=1634891953~hmac=fe65ac14bf7c857beb90f0b1c8437c96" />
-          <Avatar src="https://cdn-icons-png.flaticon.com/512/949/949635.png" />
-          <Avatar src="https://cdn-icons.flaticon.com/png/512/2295/premium/2295142.png?token=exp=1634891771~hmac=841b86d65cc2c51baf02d66aeea35bda" />
+          <Avatar src="https://www.svgrepo.com/show/125/car.svg" />
+          <Avatar src="https://www.svgrepo.com/show/20920/man.svg" />
+          <Avatar src="https://www.svgrepo.com/show/31100/woman.svg" />
+          <Avatar src="https://www.svgrepo.com/show/120838/dog.svg" />
         </div>
+        <input
+          value="Add new user"
+          type="submit"
+          className="m-4 border-2 border-gray-400 rounded-md px-2 py-1 hover:bg-gray-300"
+        />
       </label>
     </form>
   );

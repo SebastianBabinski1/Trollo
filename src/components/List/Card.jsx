@@ -21,14 +21,15 @@ const Card = (props) => {
       onMouseLeave={() => setHover(false)}
     >
       <p
-        className="bg-white rounded-md m-2 py-1 pl-2 pr-8 break-words border-2 border-gray-300"
+        className={`bg-white rounded-md m-2 py-1 pl-2 pr-8 break-words border-2 border-gray-300`}
         style={{ boxShadow: isDragging ? "0 0 0.5em" : "0px" }}
       >
         {props.text}
       </p>
       <button
-        className="delete-card absolute right-6 top-1"
-        style={{ visibility: hover ? "visible" : "hidden" }}
+        className={`delete-card absolute right-6 top-1 ${
+          hover ? "visible" : "hidden"
+        }`}
         onClick={() => props.handleRemovingCard(props.cardID, props.listID)}
       >
         x

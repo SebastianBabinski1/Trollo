@@ -1,34 +1,32 @@
 import React from "react";
 import Navbar from "./Navbar";
 import UserRegister from "./UserRegister";
-import Footer from "../components/Footer";
+import Footer from "./Footer";
+import User from "./UserSelection/User";
+
+const handleButtons = (
+  users,
+  setChoosedUser,
+  setUserSelection,
+  handleRemovingUser
+) => {
+  const tableOfUsers = [];
+
+  users.forEach((user) => {
+    tableOfUsers.push(
+      <User
+        key={user.id}
+        user={user}
+        setChoosedUser={setChoosedUser}
+        setUserSelection={setUserSelection}
+        handleRemovingUser={handleRemovingUser}
+      />
+    );
+  });
+  return tableOfUsers;
+};
 
 const UserSelection = (props) => {
-  const handleButtons = (users) => {
-    const tableOfUsers = [];
-    users.forEach((user) => {
-      tableOfUsers.push(
-        <div key={user.id} className="rounded-md hover:bg-gray-200">
-          <button
-            onClick={() => {
-              props.setChoosedUser({
-                name: user.name,
-                id: user.id,
-                avatar: user.avatar,
-              });
-              props.setUserSelection(false);
-            }}
-            className="p-4 mx-auto flex"
-          >
-            <img alt="user" src={user.avatar} className="w-16 rounded-full" />
-            <p className="my-auto mx-4 text-xl">{user.name}</p>
-          </button>
-        </div>
-      );
-    });
-    return tableOfUsers;
-  };
-
   return (
     <div className="h-screen flex flex-col">
       <Navbar />
@@ -36,7 +34,12 @@ const UserSelection = (props) => {
         <div className="bg-black w-1/6 bg-opacity-50 flex flex-col">
           <p className="flex justify-center text-white">Choose user:</p>
           <div className="flex flex-col rounded-md bg-white p-1">
-            {handleButtons(props.users)}
+            {handleButtons(
+              props.users,
+              props.setChoosedUser,
+              props.setUserSelection,
+              props.handleRemovingUser
+            )}
           </div>
         </div>
         <div className=" w-full">
@@ -44,7 +47,10 @@ const UserSelection = (props) => {
             Make your life easier with planning
           </p>
           <div className="w-1/2 mx-auto">
-            <UserRegister updateUsers={props.updateUsers} />
+            <UserRegister
+              usersLength={props.users.length}
+              updateUsers={props.updateUsers}
+            />
           </div>
         </div>
       </div>
@@ -54,3 +60,4 @@ const UserSelection = (props) => {
 };
 
 export default UserSelection;
+export { handleButtons };
