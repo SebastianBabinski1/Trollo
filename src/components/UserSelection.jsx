@@ -15,7 +15,7 @@ const handleButtons = (
   users.forEach((user) => {
     tableOfUsers.push(
       <User
-        key={user.id}
+        key={user.userID}
         user={user}
         setChoosedUser={setChoosedUser}
         setUserSelection={setUserSelection}

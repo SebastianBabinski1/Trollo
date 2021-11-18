@@ -16,8 +16,8 @@ const User = (props) => {
       <button
         onClick={() => {
           props.setChoosedUser({
+            userID: props.user.userID,
             name: props.user.name,
-            id: props.user.id,
             avatar: props.user.avatar,
           });
           props.setUserSelection(false);
@@ -27,10 +27,10 @@ const User = (props) => {
         <img alt="user" src={props.user.avatar} className="w-16 rounded-full" />
         <p className="my-auto mx-4 text-xl">{props.user.name}</p>
       </button>
-      {hover ? (
+      {props.handleRemovingUser && hover ? (
         <TrashButton
           handleRemovingUser={props.handleRemovingUser}
-          userID={props.user.id}
+          userID={props.user.userID}
         />
       ) : null}
     </div>

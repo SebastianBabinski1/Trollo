@@ -1,27 +1,16 @@
 import React, { useState } from "react";
-import Card from "./components/List/Card";
 import UserBoard from "./components/UserBoard";
 import UserSelection from "./components/UserSelection";
 
 const App = () => {
   const [userSelection, setUserSelection] = useState(true);
   const [choosedUser, setChoosedUser] = useState();
-  const [users, setUsers] = useState([
-    {
-      name: "Henry",
-      id: 0,
-      avatar: "https://www.svgrepo.com/show/125/car.svg",
-    },
-    {
-      name: "Martin",
-      id: 1,
-      avatar: "https://www.svgrepo.com/show/20920/man.svg",
-    },
-  ]);
 
   const [usersData, setUsersData] = useState([
     {
       userID: 0,
+      name: "Henry",
+      avatar: "https://www.svgrepo.com/show/125/car.svg",
       lists: [
         {
           title: "First User",
@@ -37,6 +26,8 @@ const App = () => {
     },
     {
       userID: 1,
+      name: "Martin",
+      avatar: "https://www.svgrepo.com/show/20920/man.svg",
       lists: [
         {
           title: "Second User",
@@ -52,20 +43,23 @@ const App = () => {
     },
   ]);
 
-  const handleRemovingUser = (userID) => {
-    const usersCopy = [...users];
-    const matchingUserIndex = usersCopy.findIndex((item) => item.id === userID);
-    const updatedUsers = usersCopy.slice(matchingUserIndex, 1);
+  let busyID = 0;
+  const handleID = (busyID) => {
+    usersData.forEach((user) => {
+      if (user.userID >= busyID) {
+        busyID = user.userID;
+      }
+    });
+    return busyID;
+  };
 
+  const handleRemovingUser = (userID) => {
     const usersDataCopy = [...usersData];
     const matchingUsersDataIndex = usersDataCopy.findIndex(
       (item) => item.userID === userID
     );
-    const updatedUsersData = usersDataCopy.slice(matchingUsersDataIndex, 1);
-
-    // setUsers(updatedUsers);
-    // setUsersData(updatedUsersData);
-    // Somethings here not
+    usersDataCopy.splice(matchingUsersDataIndex, 1);
+    setUsersData(usersDataCopy);
   };
 
   const handleListUpdate = (userID, newLists) => {
@@ -120,44 +114,35 @@ const App = () => {
   };
 
   const updateUsers = (newUser, avatar) => {
-    const handleID = () => {
-      let newID = 0;
-      users.forEach((user) => {
-        if (user.id >= newID) {
-          newID = newID + 1;
-        }
-      });
-      return newID;
-    };
-    const newID = handleID();
-    setUsers((prevState) => [
+    const newID = handleID(busyID) + 1;
+    console.log(newID);
+    setUsersData((prevState) => [
       ...prevState,
-      { name: newUser, id: newID, avatar: avatar },
+      { userID: newID, name: newUser, avatar: avatar, lists: [] },
     ]);
-    setUsersData((prevState) => [...prevState, { userID: newID, lists: [] }]);
   };
 
   const handleSelectedUser = () => {
     let userContent = {};
-    users.forEach((user) => {
-      if (user.id === choosedUser.id) {
+    usersData.forEach((user) => {
+      if (user.userID === choosedUser.userID) {
         userContent = user;
       }
     });
 
     const selectedUser = [];
     usersData.forEach((user) => {
-      if (user.userID === choosedUser.id) {
+      if (user.userID === choosedUser.userID) {
         selectedUser.push(
           <UserBoard
-            users={users}
+            key={user.userID}
+            users={usersData}
             setChoosedUser={setChoosedUser}
             setUserSelection={setUserSelection}
             userContent={userContent}
             handleDND={handleDND}
             userID={user.userID}
             handleListUpdate={handleListUpdate}
-            key={0}
             lists={user.lists}
           />
         );
@@ -173,7 +158,7 @@ const App = () => {
           setChoosedUser={setChoosedUser}
           setUserSelection={setUserSelection}
           updateUsers={updateUsers}
-          users={users}
+          users={usersData}
           handleRemovingUser={handleRemovingUser}
         />
       ) : (
