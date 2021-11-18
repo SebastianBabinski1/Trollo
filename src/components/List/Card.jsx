@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDrag } from "react-dnd";
-import { useState } from "react/cjs/react.development";
 
 const Card = (props) => {
   const [{ isDragging }, drag] = useDrag(() => ({
