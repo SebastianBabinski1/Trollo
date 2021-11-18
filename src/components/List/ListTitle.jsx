@@ -1,21 +1,17 @@
-import React from "react"
+import React from "react";
 
-export default class ListTitle2 extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            title:''
-        }
-        this.handleTitleChange = this.handleTitleChange.bind(this)
-    }
-    handleTitleChange(event){
-        this.setState({title:event.target.value})
-    }
-    render(){
-        return(
-            <div>
-                <input className="bg-gray-200 max-h-8 p-2" placeholder="Add title of list" onChange={this.handleTitleChange}/>
-            </div>
-        )
-    }
-}
+const ListTitle = (props) => {
+  return (
+    <div className="flex">
+      <h1 className="font-medium text-sm pt-1 pl-4">{props.title}</h1>
+      <button
+        className="ml-auto mr-4"
+        onClick={() => props.handleRemovingList(props.listID)}
+      >
+        x
+      </button>
+    </div>
+  );
+};
+
+export default ListTitle;

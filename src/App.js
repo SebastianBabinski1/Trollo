@@ -1,145 +1,171 @@
-// import Button from './components/Button';
-// import Navbar from './components/Navbar';
-// import { TableSVG } from './svg/TableSVG';
-// import BoardHeader from './components/BoardHeader';
-import List from "./components/List/List.jsx";
-import React from "react";
+import React, { useState } from "react";
+import UserBoard from "./components/UserBoard";
+import UserSelection from "./components/UserSelection";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleAddingList = this.handleAddingList.bind(this);
-    this.handleLists = this.handleLists.bind(this);
-    this.state = {
+const App = () => {
+  const [userSelection, setUserSelection] = useState(true);
+  const [choosedUser, setChoosedUser] = useState();
+
+  const [usersData, setUsersData] = useState([
+    {
+      userID: 0,
+      name: "Henry",
+      avatar: "https://www.svgrepo.com/show/125/car.svg",
       lists: [
         {
-          title: "First Episode",
+          title: "First User",
           id: 0,
-          cards: [
-            {
-              id: 0,
-              text: "Im a first card of first list",
-            },
-            {
-              id: 1,
-              text: "Im a second card of first list",
-            },
-          ],
+          cards: [],
         },
         {
-          title: "Second Episode",
+          title: "Something",
           id: 1,
-          cards: [
-            {
-              id: 0,
-              text: "Im a first card of second list",
-            },
-            {
-              id: 1,
-              text: "Im a second card of second list",
-            },
-          ],
+          cards: [],
         },
       ],
-    };
-  }
+    },
+    {
+      userID: 1,
+      name: "Martin",
+      avatar: "https://www.svgrepo.com/show/20920/man.svg",
+      lists: [
+        {
+          title: "Second User",
+          id: 0,
+          cards: [],
+        },
+        {
+          title: "Something",
+          id: 1,
+          cards: [],
+        },
+      ],
+    },
+  ]);
 
-  handleAddingCard(listID, cardText) {
+  let busyID = 0;
+  const handleID = (busyID) => {
+    usersData.forEach((user) => {
+      if (user.userID >= busyID) {
+        busyID = user.userID;
+      }
+    });
+    return busyID;
+  };
+
+  const handleRemovingUser = (userID) => {
+    const usersDataCopy = [...usersData];
+    const matchingUsersDataIndex = usersDataCopy.findIndex(
+      (item) => item.userID === userID
+    );
+    usersDataCopy.splice(matchingUsersDataIndex, 1);
+    setUsersData(usersDataCopy);
+  };
+
+  const handleListUpdate = (userID, newLists) => {
+    const stateCopy = [...usersData];
+    const matchingIndex = stateCopy.findIndex((item) => item.userID === userID);
+
+    stateCopy[matchingIndex].lists = newLists;
+
+    setUsersData(stateCopy);
+  };
+
+  const handleDND = (
+    userID,
+    removingListID,
+    addingListID,
+    cardText,
+    cardID
+  ) => {
     const handleCardCounter = (list) => {
       let calculatedID = 0;
+
       list.cards.forEach((card) => {
         if (card.id >= calculatedID) {
           calculatedID = card.id + 1;
         }
       });
+
       return calculatedID;
     };
-
-    this.state.lists.forEach((item) => {
-      if (item.id === listID) {
-        this.setState({
-          cards: item.cards.push({
-            id: handleCardCounter(item),
-            text: cardText,
-          }),
-        });
-      }
-    });
-  }
-
-  handleRemovingCard(cardID, listID) {
-    this.state.lists.forEach((item) => {
-      if (item.id === listID) {
-        item.cards.forEach((card, index) => {
-          if (card.id === cardID) {
-            this.setState({ cards: item.cards.splice(index, 1) });
+    const updatedUsersData = [...usersData];
+    usersData.forEach((user, userIndex) => {
+      if (user.userID === userID) {
+        user.lists.forEach((list, listIndex) => {
+          if (list.id === removingListID) {
+            const removingCardIndex = list.cards.findIndex(
+              (card) => card.id === cardID
+            );
+            updatedUsersData[userIndex].lists[listIndex].cards.splice(
+              removingCardIndex,
+              1
+            );
+          } else if (list.id === addingListID) {
+            updatedUsersData[userIndex].lists[listIndex].cards.push({
+              id: handleCardCounter(list),
+              text: cardText,
+            });
           }
         });
       }
     });
-  }
+    setUsersData(updatedUsersData);
+  };
 
-  handleAddingList() {
-    const handleListCounter = () => {
-      let calculatedID = 0;
-      this.state.lists.forEach((list) => {
-        if (list.id >= calculatedID) {
-          calculatedID = list.id + 1;
-        }
-      });
-      return calculatedID;
-    };
+  const updateUsers = (newUser, avatar) => {
+    const newID = handleID(busyID) + 1;
+    console.log(newID);
+    setUsersData((prevState) => [
+      ...prevState,
+      { userID: newID, name: newUser, avatar: avatar, lists: [] },
+    ]);
+  };
 
-    this.setState({
-      lists: [
-        ...this.state.lists,
-        {
-          title: "",
-          id: handleListCounter(),
-          cards: [],
-        },
-      ],
+  const handleSelectedUser = () => {
+    let userContent = {};
+    usersData.forEach((user) => {
+      if (user.userID === choosedUser.userID) {
+        userContent = user;
+      }
     });
-  }
 
-  handleLists() {
-    const tableOfLists = [];
-    this.state.lists.forEach((item) => {
-      tableOfLists.push(
-        <List
-          key={item.id}
-          listID={item.id}
-          cards={item.cards}
-          title={item.title}
-          handleAddingCard={this.handleAddingCard.bind(this)}
-          handleRemovingCard={this.handleRemovingCard.bind(this)}
+    const selectedUser = [];
+    usersData.forEach((user) => {
+      if (user.userID === choosedUser.userID) {
+        selectedUser.push(
+          <UserBoard
+            key={user.userID}
+            users={usersData}
+            setChoosedUser={setChoosedUser}
+            setUserSelection={setUserSelection}
+            userContent={userContent}
+            handleDND={handleDND}
+            userID={user.userID}
+            handleListUpdate={handleListUpdate}
+            lists={user.lists}
+          />
+        );
+      }
+    });
+    return selectedUser;
+  };
+
+  return (
+    <div className="h-screen bg-mountains bg-center bg-cover flex flex-col">
+      {userSelection ? (
+        <UserSelection
+          setChoosedUser={setChoosedUser}
+          setUserSelection={setUserSelection}
+          updateUsers={updateUsers}
+          users={usersData}
+          handleRemovingUser={handleRemovingUser}
         />
-      );
-    });
-    return tableOfLists;
-  }
-
-  render() {
-    return (
-      <div className="App h-screen bg-red-100">
-        <div className="App-header">
-          {/* Here u must do smth with svg files, cause there are errors */}
-          {/* <Navbar/> */}
-          {/* <Button spanClass="pl-2" buttonClass="flex p-1 m-2 bg-black bg-opacity-10 rounded-md hover:bg-opacity-20" svg={TableSVG} text="Sample button"/> */}
-          {/* <BoardHeader tableName="Name of table"/> */}
-        </div>
-        <div className="App-content flex">
-          {this.handleLists()}
-          <button
-            className="border-2 px-2 rounded-r-md shadow-md w-1/4 h-8 mt-2 bg-white opacity-70"
-            onClick={this.handleAddingList}
-          >
-            Add new list
-          </button>
-        </div>
-      </div>
-    );
-  }
-}
+      ) : (
+        handleSelectedUser()
+      )}
+    </div>
+  );
+};
 
 export default App;
