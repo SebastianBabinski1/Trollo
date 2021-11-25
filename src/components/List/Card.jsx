@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import userDataContext from "../../context/userDataContext";
+import handleListUpdateContext from "../../context/handleListUpdateContext";
 import { useDrag } from "react-dnd";
 
 const Card = (props) => {
@@ -11,6 +13,30 @@ const Card = (props) => {
   }));
 
   const [hover, setHover] = useState(false);
+  const { choosedUser } = useContext(userDataContext);
+  const { handleListUpdate } = useContext(handleListUpdateContext);
+
+  const handleRemovingCard = (cardID, listID) => {
+    choosedUser.table.lists.forEach((item, indexofArray) => {
+      if (item.id === listID) {
+        item.cards.forEach((card, indexofCard) => {
+          if (card.id === cardID) {
+            let newArray = [...choosedUser.table.lists];
+
+            let cardsAfterRemoving = item.cards;
+            cardsAfterRemoving.splice(indexofCard, 1);
+            newArray[indexofArray].cards = cardsAfterRemoving;
+
+            handleListUpdate(
+              choosedUser.user.userID,
+              newArray,
+              choosedUser.table.tableID
+            );
+          }
+        });
+      }
+    });
+  };
 
   return (
     <div
@@ -29,7 +55,7 @@ const Card = (props) => {
         className={`delete-card absolute right-6 top-1 ${
           hover ? "visible" : "hidden"
         }`}
-        onClick={() => props.handleRemovingCard(props.cardID, props.listID)}
+        onClick={() => handleRemovingCard(props.cardID, props.listID)}
       >
         x
       </button>

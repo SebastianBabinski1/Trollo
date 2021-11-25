@@ -1,22 +1,30 @@
-import Button from "./Button";
+import { useContext } from "react";
+import userDataContext from "../context/userDataContext";
 import { TableSVG } from "../svg/TableSVG";
 
 const Navbar = (props) => {
+  const { choosedUser, setUserSelection, userSelection } =
+    useContext(userDataContext);
   const userContent = () => {
     return (
-      <div className="flex pr-2">
-        <img alt="avatar" src={props.userContent.avatar} className="w-10" />
-        <p className="my-auto">{props.userContent.name}</p>
-      </div>
+      <button
+        className="flex pr-2"
+        onClick={() => {
+          props.setSidebarActive(!props.sidebarActive);
+        }}
+      >
+        <img alt="avatar" src={choosedUser.user.avatar} className="w-10" />
+        <p className="my-auto">{choosedUser.user.name}</p>
+      </button>
     );
   };
 
   return (
     <div className="flex bg-black bg-opacity-50 text-white">
-      {props.setUserSelection ? (
+      {userSelection ? null : (
         <button
           onClick={() => {
-            props.setUserSelection(true);
+            setUserSelection(true);
           }}
           className="ml-2"
         >
@@ -35,12 +43,13 @@ const Navbar = (props) => {
             />
           </svg>
         </button>
-      ) : null}
+      )}
 
-      <div className="flex m-auto opacity-50 hover:opacity-100">
-        <Button buttonClass="flex" svg={TableSVG} text="Trollo" />
+      <div className="flex m-auto opacity-50">
+        {TableSVG}
+        Trollo
       </div>
-      {props.userContent ? userContent() : null}
+      {choosedUser ? userContent() : null}
     </div>
   );
 };

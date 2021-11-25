@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import userDataContext from "../context/userDataContext";
 import Navbar from "./Navbar";
 import UserRegister from "./UserRegister";
 import Footer from "./Footer";
@@ -27,6 +28,18 @@ const handleButtons = (
 };
 
 const UserSelection = (props) => {
+  const { usersData, setUsersData, setChoosedUser, setUserSelection } =
+    useContext(userDataContext);
+
+  const handleRemovingUser = (userID) => {
+    const usersDataCopy = [...usersData];
+    const matchingUsersDataIndex = usersDataCopy.findIndex(
+      (item) => item.userID === userID
+    );
+    usersDataCopy.splice(matchingUsersDataIndex, 1);
+    setUsersData(usersDataCopy);
+  };
+
   return (
     <div className="h-screen flex flex-col">
       <Navbar />
@@ -35,10 +48,10 @@ const UserSelection = (props) => {
           <p className="flex justify-center text-white">Choose user:</p>
           <div className="flex flex-col rounded-md bg-white p-1">
             {handleButtons(
-              props.users,
-              props.setChoosedUser,
-              props.setUserSelection,
-              props.handleRemovingUser
+              usersData,
+              setChoosedUser,
+              setUserSelection,
+              handleRemovingUser
             )}
           </div>
         </div>
@@ -47,10 +60,7 @@ const UserSelection = (props) => {
             Make your life easier with planning
           </p>
           <div className="w-1/2 mx-auto">
-            <UserRegister
-              usersLength={props.users.length}
-              updateUsers={props.updateUsers}
-            />
+            <UserRegister />
           </div>
         </div>
       </div>

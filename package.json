@@ -1,8 +1,6 @@
 {
   "name": "trollo",
   "version": "0.1.0",
-  "homepage": ".",
-  "proxy": "http://localhost:3000",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.2.0",

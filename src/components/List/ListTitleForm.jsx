@@ -1,12 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import handleListUpdateContext from "../../context/handleListUpdateContext";
+import userDataContext from "../../context/userDataContext";
 
 const ListTitleForm = (props) => {
   const [title, setTitle] = useState("");
 
+  const { choosedUser } = useContext(userDataContext);
+  const { handleListUpdate } = useContext(handleListUpdateContext);
+
+  const handleAddingList = (title) => {
+    const handleListCounter = () => {
+      let calculatedID = 0;
+      choosedUser.table.lists.forEach((list) => {
+        if (list.id >= calculatedID) {
+          calculatedID = list.id + 1;
+        }
+      });
+      return calculatedID;
+    };
+
+    if (title !== "") {
+      const newList = [
+        ...choosedUser.table.lists,
+        { title: title, id: handleListCounter(), cards: [] },
+      ];
+      handleListUpdate(
+        choosedUser.user.userID,
+        newList,
+        choosedUser.table.tableID
+      );
+    }
+  };
+
   const handleSubmit = (event) => {
-    props.handleAddingList(title);
+    handleAddingList(title);
     event.preventDefault();
-    props.handleShowingTitleForm();
+    props.setShowComponent();
   };
 
   const handleChange = (event) => {

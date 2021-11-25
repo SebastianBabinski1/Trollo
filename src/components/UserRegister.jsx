@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import userDataContext from "../context/userDataContext";
 
 const UserRegister = (props) => {
   const [value, setValue] = useState("");
@@ -7,15 +8,40 @@ const UserRegister = (props) => {
     src: "",
   });
 
+  const { usersData, setUsersData } = useContext(userDataContext);
+
+  const updateUsers = (newUser, avatar) => {
+    let busyID = 0;
+    const handleID = (busyID) => {
+      usersData.forEach((user) => {
+        if (user.userID >= busyID) {
+          busyID = user.userID;
+        }
+      });
+      return busyID;
+    };
+
+    const newID = handleID(busyID) + 1;
+    setUsersData((prevState) => [
+      ...prevState,
+      {
+        userID: newID,
+        name: newUser,
+        avatar: avatar,
+        tables: [{ tableID: 0, tableName: "Your table", lists: [] }],
+      },
+    ]);
+  };
+
   const handleSubmit = (event) => {
     if ((value === "") | (image.src === "")) {
       alert("Please choose name and image");
-    } else if (props.usersLength > 4) {
+    } else if (usersData.length > 4) {
       alert(
         "Ups... maximum number of users is 5. Please remove one user and try again"
       );
     } else {
-      props.updateUsers(value, image.src);
+      updateUsers(value, image.src);
       setValue("");
       setImage({ active: false, src: "" });
     }
