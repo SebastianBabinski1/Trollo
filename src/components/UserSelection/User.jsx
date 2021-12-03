@@ -1,26 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import userDataContext from "../../context/userDataContext";
 import TrashButton from "./TrashButton";
 
 const User = (props) => {
   const [hover, setHover] = useState(false);
   const [chooseTable, setChooseTable] = useState(false);
 
+  const { setChoosedUser } = useContext(userDataContext);
+
+  const navigate = useNavigate();
+
   const handleTableSelection = () => {
     const tables = [];
     props.user.tables.forEach((item) => {
       tables.push(
-        <button
+        <Link
+          to={props.user.name}
           key={item.tableID}
           onClick={() => {
-            props.setChoosedUser({
+            setChoosedUser({
               user: props.user,
               table: item,
             });
-            props.setUserSelection(false);
           }}
+          className="hover:bg-gray-200 text-center"
         >
           {item.tableName}
-        </button>
+        </Link>
       );
     });
     return tables;
@@ -42,13 +49,11 @@ const User = (props) => {
             if (props.user.tables.length > 1) {
               setChooseTable(!chooseTable);
             } else {
-              props.setChoosedUser({
-                userID: props.user.userID,
-                name: props.user.name,
-                avatar: props.user.avatar,
+              setChoosedUser({
+                user: props.user,
                 table: props.user.tables[0],
               });
-              props.setUserSelection(false);
+              navigate(props.user.name);
             }
           }}
           className="p-4 mx-auto flex"
@@ -60,12 +65,7 @@ const User = (props) => {
           />
           <p className="my-auto mx-4 text-xl">{props.user.name}</p>
         </button>
-        {props.handleRemovingUser && hover ? (
-          <TrashButton
-            handleRemovingUser={props.handleRemovingUser}
-            userID={props.user.userID}
-          />
-        ) : null}
+        {hover ? <TrashButton userID={props.user.userID} /> : null}
       </div>
       {chooseTable ? handleTableSelection() : null}
     </>

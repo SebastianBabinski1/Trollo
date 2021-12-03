@@ -33,6 +33,7 @@ const List = (props) => {
             {
               id: handleCardCounter(item),
               text: cardText,
+              complete: false,
             },
           ]);
 
@@ -128,8 +129,11 @@ const List = (props) => {
     event.preventDefault();
   };
 
+  // Somethings wrong here
   const handleCardsRendering = (cards) => {
     const tableOfCards = [];
+    // const tableOfCompleteCards = [];
+    // const tableofIncompleteCards = []
     cards.forEach((card) => {
       tableOfCards.push(
         <Card
@@ -137,8 +141,18 @@ const List = (props) => {
           listID={props.list.id}
           cardID={card.id}
           text={card.text}
+          complete={card.complete}
         />
       );
+    });
+    tableOfCards.forEach((card, index) => {
+      if (card.props.complete === true) {
+        // array.push(array.splice(array.indexOf(element), 1)[0]);
+        console.log("card complete");
+        tableOfCards.push(
+          tableOfCards.splice(tableOfCards.indexOf(card), 1)[0]
+        );
+      }
     });
     return tableOfCards;
   };

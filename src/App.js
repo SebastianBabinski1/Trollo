@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import { Routes, Route, Link } from "react-router-dom";
 import userDataContext from "./context/userDataContext";
 import UserBoard from "./components/UserBoard";
-import UserSelection from "./components/UserSelection";
+import UserSelection from "./components/UserSelection/UserSelection";
 
 const App = () => {
-  const [userSelection, setUserSelection] = useState(true);
   const [choosedUser, setChoosedUser] = useState();
-
+  // user: props.user,
+  // table: item,
   const [usersData, setUsersData] = useState([
     {
       userID: 0,
@@ -50,24 +51,36 @@ const App = () => {
   ]);
 
   return (
-    <userDataContext.Provider
-      value={{
-        usersData,
-        setUsersData,
-        choosedUser,
-        setChoosedUser,
-        userSelection,
-        setUserSelection,
-      }}
-    >
-      <div className="h-screen bg-mountains bg-center bg-cover flex flex-col">
-        {userSelection ? (
-          <UserSelection />
-        ) : (
-          <UserBoard key={choosedUser.user.userID} />
-        )}
-      </div>
-    </userDataContext.Provider>
+    <>
+      <userDataContext.Provider
+        value={{
+          usersData,
+          setUsersData,
+          choosedUser,
+          setChoosedUser,
+        }}
+      >
+        <div className="App h-screen bg-mountains bg-center bg-cover flex flex-col">
+          <Routes>
+            <Route path="/" element={<UserSelection />} />
+            {choosedUser ? (
+              <Route
+                path={choosedUser.user.name}
+                element={<UserBoard key={choosedUser.user.userID} />}
+              />
+            ) : null}
+            <Route
+              path="*"
+              element={
+                <Link className="text-white" to="/">
+                  404! Click here and back to home
+                </Link>
+              }
+            />
+          </Routes>
+        </div>
+      </userDataContext.Provider>
+    </>
   );
 };
 

@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import userDataContext from "../../context/userDataContext";
 
 const TrashButton = (props) => {
   const [hover, setHover] = useState(false);
+  const { usersData, setUsersData } = useContext(userDataContext);
+
+  const handleRemovingUser = (userID) => {
+    const usersDataCopy = [...usersData];
+    const matchingUsersDataIndex = usersDataCopy.findIndex(
+      (item) => item.userID === userID
+    );
+    usersDataCopy.splice(matchingUsersDataIndex, 1);
+    setUsersData(usersDataCopy);
+  };
 
   return (
     <button
       className={` absolute right-0 top-8 mr-2`}
-      onClick={() => props.handleRemovingUser(props.userID)}
+      onClick={() => handleRemovingUser(props.userID)}
       onMouseEnter={() => {
         setHover(true);
       }}

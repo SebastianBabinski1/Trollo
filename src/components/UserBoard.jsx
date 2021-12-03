@@ -7,20 +7,12 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import ListTitleForm from "./List/ListTitleForm.jsx";
 import Footer from "./Footer";
-import SidebarNav from "./SidebarNav/SidebarNav";
 import TableSelection from "./TableSelection/TableSelection";
 
-const UserBoard = (props) => {
+const UserBoard = () => {
   const [showComponent, setShowComponent] = useState(false);
-  const [sidebarActive, setSidebarActive] = useState(true);
 
-  const {
-    usersData,
-    setUsersData,
-    choosedUser,
-    setChoosedUser,
-    setUserSelection,
-  } = useContext(userDataContext);
+  const { usersData, setUsersData, choosedUser } = useContext(userDataContext);
 
   const handleListUpdate = (userID, newLists, tableID) => {
     const stateCopy = [...usersData];
@@ -49,10 +41,7 @@ const UserBoard = (props) => {
       <DndProvider backend={HTML5Backend}>
         <div className="relative h-screen flex flex-col overflow-hidden">
           <div>
-            <Navbar
-              sidebarActive={sidebarActive}
-              setSidebarActive={setSidebarActive}
-            />
+            <Navbar />
           </div>
           <div className="flex flex-grow">
             <TableSelection />
@@ -72,7 +61,6 @@ const UserBoard = (props) => {
                 ) : null}
               </div>
             </div>
-            <SidebarNav sidebarActive={sidebarActive} />
           </div>
           <Footer />
         </div>
