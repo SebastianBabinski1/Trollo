@@ -93,13 +93,14 @@ const List = (props) => {
         });
       }
     });
-    // console.log("userID: " + userID);
-    // console.log("removingListID: " + removingListID);
-    // console.log("addingListID: " + addingListID);
-    // console.log("cardText: " + cardText);
-    // console.log("cardID: " + cardID);
-    // console.log("tableID: " + tableID);
-    // console.log("___________________________");
+    console.log("userID: " + userID);
+    console.log("removingListID: " + removingListID);
+    console.log("addingListID: " + addingListID);
+    console.log("cardText: " + cardText);
+    console.log("cardID: " + cardID);
+    console.log("tableID: " + tableID);
+    console.log("choosedUser: ", choosedUser);
+    console.log("___________________________");
     setUsersData(updatedUsersData);
   };
 
@@ -132,8 +133,6 @@ const List = (props) => {
   // Somethings wrong here
   const handleCardsRendering = (cards) => {
     const tableOfCards = [];
-    // const tableOfCompleteCards = [];
-    // const tableofIncompleteCards = []
     cards.forEach((card) => {
       tableOfCards.push(
         <Card
@@ -145,15 +144,12 @@ const List = (props) => {
         />
       );
     });
-    tableOfCards.forEach((card, index) => {
-      if (card.props.complete === true) {
-        // array.push(array.splice(array.indexOf(element), 1)[0]);
-        console.log("card complete");
-        tableOfCards.push(
-          tableOfCards.splice(tableOfCards.indexOf(card), 1)[0]
-        );
-      }
-    });
+    // tableOfCards.forEach((card, index) => {
+    //   if (card.complete === true) {
+    //     console.log("card complete");
+    //     tableOfCards.push(tableOfCards.splice(tableOfCards[index], 1)[0]);
+    //   }
+    // });
     return tableOfCards;
   };
 

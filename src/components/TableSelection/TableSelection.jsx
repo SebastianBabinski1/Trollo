@@ -19,27 +19,42 @@ const TableSelection = () => {
         onMouseLeave={() => {
           setHover(false);
         }}
-        className="flex relative justify-center w-full transition duration-300 ease-in-out transform hover:bg-white hover:text-black"
+        className={`flex relative justify-center w-full transition duration-300 ease-in-out transform ${
+          choosedUser.table === props.table
+            ? "bg-white text-black"
+            : "hover:bg-white hover:text-black"
+        } `}
       >
         <button
           onClick={() => {
             setChoosedUser({
-              user: choosedUser.user,
+              user: props.user,
               table: props.table,
             });
           }}
         >
           {props.table.tableName}
         </button>
-        {hover ? <TrashRemoveUser table={props.table} /> : null}
+        {hover && choosedUser.table !== props.table ? (
+          <TrashRemoveUser table={props.table} />
+        ) : null}
       </div>
     );
   };
 
   const TablesRendering = () => {
     const tables = [];
-    choosedUser.user.tables.forEach((table) => {
-      tables.push(<Table key={table.tableID} table={table} />);
+    const matchingUserIndex = usersData.findIndex(
+      (user) => user.userID === choosedUser.user.userID
+    );
+    usersData[matchingUserIndex].tables.forEach((table) => {
+      tables.push(
+        <Table
+          key={table.tableID}
+          user={usersData[matchingUserIndex]}
+          table={table}
+        />
+      );
     });
     return tables;
   };
@@ -148,7 +163,7 @@ const TableSelection = () => {
         ) : (
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
+            className="h-6 w-6 bg-black bg-opacity-50 rounded-br-lg"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
