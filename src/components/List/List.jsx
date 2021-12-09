@@ -104,6 +104,9 @@ const List = (props) => {
     setUsersData(updatedUsersData);
   };
 
+  const currentTableID = choosedUser.table.tableID;
+  console.log(currentTableID);
+
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "card",
     drop: (item) =>
@@ -113,7 +116,8 @@ const List = (props) => {
         props.list.id,
         item.text,
         item.id,
-        choosedUser.table.tableID
+        // item.tableID
+        currentTableID
       ),
     collect: (monitor) => ({
       isOver: !!!monitor.isOver(),
@@ -140,6 +144,8 @@ const List = (props) => {
           listID={props.list.id}
           cardID={card.id}
           text={card.text}
+          // tableID should be removed?
+          tableID={choosedUser.table.tableID}
           complete={card.complete}
         />
       );
@@ -165,6 +171,9 @@ const List = (props) => {
     <div
       className="flex flex-col list-wrapper flex-shrink-0 w-1/5 bg-gray-200 m-2 border-2 border-gray-300 rounded-md p-1"
       ref={drop}
+      onClick={() => {
+        console.log("List choosed user: ", choosedUser);
+      }}
     >
       <ListTitle title={props.list.title} listID={props.listID} />
       <div className="overflow-y-scroll max-h-96">

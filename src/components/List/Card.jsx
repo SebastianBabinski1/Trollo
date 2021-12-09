@@ -6,7 +6,13 @@ import { useDrag } from "react-dnd";
 const Card = (props) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "card",
-    item: { id: props.cardID, text: props.text, listID: props.listID },
+    item: {
+      id: props.cardID,
+      text: props.text,
+      listID: props.listID,
+      // tableID should be removed
+      tableID: props.tableID,
+    },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -28,7 +34,7 @@ const Card = (props) => {
             let cardsAfterRemoving = item.cards;
             cardsAfterRemoving.splice(indexofCard, 1);
             newArray[indexofArray].cards = cardsAfterRemoving;
-
+            console.log(choosedUser);
             handleListUpdate(
               choosedUser.user.userID,
               newArray,
@@ -62,11 +68,11 @@ const Card = (props) => {
       matchingListIndex
     ].cards[matchingCardIndex].complete = complete;
 
-    console.log(
-      updatedTask[matchingUserIndex].tables[matchingTableIndex].lists[
-        matchingListIndex
-      ]
-    );
+    // console.log(
+    //   updatedTask[matchingUserIndex].tables[matchingTableIndex].lists[
+    //     matchingListIndex
+    //   ]
+    // );
     setUsersData(updatedTask);
     setComplete(!complete);
   };
@@ -77,6 +83,7 @@ const Card = (props) => {
       ref={drag}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      onClick={() => console.log("card choosed user: ", choosedUser)}
     >
       <p
         className={`bg-white rounded-md m-2 py-1 pl-2 pr-8 break-words border-2 border-gray-300 ${
