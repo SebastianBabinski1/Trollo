@@ -4,20 +4,41 @@ import userDataContext from "../context/userDataContext";
 import { TableSVG } from "../svg/TableSVG";
 
 const Navbar = () => {
-  const { choosedUser, setChoosedUser } = useContext(userDataContext);
+  const {
+    usersData,
+    setUsersData,
+    activeUserIndex,
+    activeTableIndex,
+    choosedUser,
+    setChoosedUser,
+  } = useContext(userDataContext);
 
   const userContent = () => {
     return (
       <>
         <div className="mr-auto ml-4 my-auto opacity 70">
-          <p>Table: {choosedUser.table.tableName}</p>
+          <p>
+            Table:{" "}
+            {usersData[activeUserIndex].tables[activeTableIndex].tableName}
+          </p>
         </div>
         <div className="flex pr-2">
-          <img alt="avatar" src={choosedUser.user.avatar} className="w-10" />
-          <p className="my-auto">{choosedUser.user.name}</p>
+          <img
+            alt="avatar"
+            src={usersData[activeUserIndex].avatar}
+            className="w-10"
+          />
+          <p className="my-auto">{usersData[activeUserIndex].name}</p>
         </div>
       </>
     );
+  };
+
+  const handleUnactiveUser = () => {
+    const dataCopy = [...usersData];
+    dataCopy[activeUserIndex].active = false;
+    dataCopy[activeUserIndex].tables[activeTableIndex].active = false;
+    setUsersData(dataCopy);
   };
 
   return (
@@ -25,7 +46,8 @@ const Navbar = () => {
       <Link
         to="/"
         onClick={() => {
-          setChoosedUser();
+          setChoosedUser(false);
+          handleUnactiveUser();
         }}
         className="flex my-auto mx-2 opacity-50 hover:opacity-100 text-lg items-center"
       >

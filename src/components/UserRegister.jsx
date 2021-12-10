@@ -28,7 +28,10 @@ const UserRegister = (props) => {
         userID: newID,
         name: newUser,
         avatar: avatar,
-        tables: [{ tableID: 0, tableName: "Your table", lists: [] }],
+        active: false,
+        tables: [
+          { tableID: 0, tableName: "Your table", active: false, lists: [] },
+        ],
       },
     ]);
   };

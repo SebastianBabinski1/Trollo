@@ -6,8 +6,24 @@ const TableSelection = () => {
   const [value, setValue] = useState("");
   const [active, setActive] = useState(true);
   const [addingTable, setAddingTable] = useState(false);
-  const { choosedUser, setChoosedUser, usersData, setUsersData } =
-    useContext(userDataContext);
+  const {
+    activeUserIndex,
+    activeTableIndex,
+    choosedUser,
+    setChoosedUser,
+    usersData,
+    setUsersData,
+  } = useContext(userDataContext);
+
+  const handleTableChange = (newTableID) => {
+    const dataCopy = [...usersData];
+    dataCopy[activeUserIndex].tables[activeTableIndex].active = false;
+    const matchingNewTableIndex = dataCopy[activeUserIndex].tables.findIndex(
+      (table) => table.tableID === newTableID
+    );
+    dataCopy[activeUserIndex].tables[matchingNewTableIndex].active = true;
+    setUsersData(dataCopy);
+  };
 
   const Table = (props) => {
     const [hover, setHover] = useState(false);
@@ -20,22 +36,20 @@ const TableSelection = () => {
           setHover(false);
         }}
         className={`flex relative justify-center w-full transition duration-300 ease-in-out transform ${
-          choosedUser.table === props.table
+          usersData[activeUserIndex].tables[activeTableIndex] === props.table
             ? "bg-white text-black"
             : "hover:bg-white hover:text-black"
         } `}
       >
         <button
           onClick={() => {
-            setChoosedUser({
-              user: props.user,
-              table: props.table,
-            });
+            handleTableChange(props.table.tableID);
           }}
         >
           {props.table.tableName}
         </button>
-        {hover && choosedUser.table !== props.table ? (
+        {hover &&
+        usersData[activeUserIndex].tables[activeTableIndex] !== props.table ? (
           <TrashRemoveUser table={props.table} />
         ) : null}
       </div>
@@ -44,14 +58,11 @@ const TableSelection = () => {
 
   const TablesRendering = () => {
     const tables = [];
-    const matchingUserIndex = usersData.findIndex(
-      (user) => user.userID === choosedUser.user.userID
-    );
-    usersData[matchingUserIndex].tables.forEach((table) => {
+    usersData[activeUserIndex].tables.forEach((table) => {
       tables.push(
         <Table
           key={table.tableID}
-          user={usersData[matchingUserIndex]}
+          user={usersData[activeUserIndex]}
           table={table}
         />
       );
@@ -70,16 +81,12 @@ const TableSelection = () => {
       const handleAddingTable = () => {
         const newTables = usersData;
 
-        const matchingUserIndex = usersData.findIndex(
-          (user) => user.userID === choosedUser.user.userID
-        );
-
-        if (newTables[matchingUserIndex].tables.length > 9) {
+        if (usersData[activeUserIndex].tables.length > 9) {
           alert("You have too many tables. Please remove the unused table");
         } else {
-          newTables[matchingUserIndex].tables.push({
+          newTables[activeUserIndex].tables.push({
             // This ID should be assigned in other way
-            tableID: usersData[matchingUserIndex].tables.length,
+            tableID: usersData[activeUserIndex].tables.length,
             tableName: value,
             lists: [],
           });

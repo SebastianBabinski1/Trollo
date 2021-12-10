@@ -3,17 +3,16 @@ import userDataContext from "../../context/userDataContext";
 
 const TrashRemoveUser = (props) => {
   const [hover, setHover] = useState(false);
-  const { choosedUser, usersData, setUsersData } = useContext(userDataContext);
+  const { activeUserIndex, usersData, setUsersData } =
+    useContext(userDataContext);
 
   const handleRemovingTable = (tableID) => {
     const updatedUsers = [...usersData];
-    const matchingUserIndex = usersData.findIndex(
-      (user) => user.userID === choosedUser.user.userID
-    );
-    const matchingTableIndex = usersData[matchingUserIndex].tables.findIndex(
+
+    const matchingTableIndex = usersData[activeUserIndex].tables.findIndex(
       (table) => table.tableID === tableID
     );
-    updatedUsers[matchingUserIndex].tables.splice(matchingTableIndex, 1);
+    updatedUsers[activeUserIndex].tables.splice(matchingTableIndex, 1);
     setUsersData(updatedUsers);
   };
 

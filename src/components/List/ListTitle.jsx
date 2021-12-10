@@ -3,17 +3,20 @@ import userDataContext from "../../context/userDataContext";
 import handleListUpdateContext from "../../context/handleListUpdateContext";
 
 const ListTitle = (props) => {
-  const { choosedUser } = useContext(userDataContext);
+  const { activeUserIndex, activeTableIndex, usersData } =
+    useContext(userDataContext);
   const { handleListUpdate } = useContext(handleListUpdateContext);
 
   const handleRemovingList = (listID) => {
-    const updatedLists = [...choosedUser.table.lists];
+    const updatedLists = [
+      ...usersData[activeUserIndex].tables[activeTableIndex].lists,
+    ];
     const indexOfList = updatedLists.findIndex((list) => list.id === listID);
     updatedLists.splice(indexOfList, 1);
     handleListUpdate(
-      choosedUser.user.userID,
+      usersData[activeUserIndex].userID,
       updatedLists,
-      choosedUser.table.tableID
+      usersData[activeUserIndex].tables[activeTableIndex].tableID
     );
   };
 

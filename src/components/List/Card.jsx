@@ -10,7 +10,6 @@ const Card = (props) => {
       id: props.cardID,
       text: props.text,
       listID: props.listID,
-      // tableID should be removed
       tableID: props.tableID,
     },
     collect: (monitor) => ({
@@ -18,61 +17,60 @@ const Card = (props) => {
     }),
   }));
 
-  // Somethings wrong here
   const [hover, setHover] = useState(false);
   const [complete, setComplete] = useState(false);
-  const { choosedUser, usersData, setUsersData } = useContext(userDataContext);
+  const {
+    activeUserIndex,
+    activeTableIndex,
+    choosedUser,
+    usersData,
+    setUsersData,
+  } = useContext(userDataContext);
   const { handleListUpdate } = useContext(handleListUpdateContext);
 
   const handleRemovingCard = (cardID, listID) => {
-    choosedUser.table.lists.forEach((item, indexofArray) => {
-      if (item.id === listID) {
-        item.cards.forEach((card, indexofCard) => {
-          if (card.id === cardID) {
-            let newArray = [...choosedUser.table.lists];
+    usersData[activeUserIndex].tables[activeTableIndex].lists.forEach(
+      (item, indexofArray) => {
+        if (item.id === listID) {
+          item.cards.forEach((card, indexofCard) => {
+            if (card.id === cardID) {
+              let newArray = [
+                ...usersData[activeUserIndex].tables[activeTableIndex].lists,
+              ];
 
-            let cardsAfterRemoving = item.cards;
-            cardsAfterRemoving.splice(indexofCard, 1);
-            newArray[indexofArray].cards = cardsAfterRemoving;
-            console.log(choosedUser);
-            handleListUpdate(
-              choosedUser.user.userID,
-              newArray,
-              choosedUser.table.tableID
-            );
-          }
-        });
+              let cardsAfterRemoving = item.cards;
+              cardsAfterRemoving.splice(indexofCard, 1);
+              newArray[indexofArray].cards = cardsAfterRemoving;
+
+              handleListUpdate(
+                usersData[activeUserIndex].userID,
+                newArray,
+                usersData[activeUserIndex].tables[activeTableIndex].tableID
+              );
+            }
+          });
+        }
       }
-    });
+    );
   };
 
   const handleCompleteTask = () => {
     let updatedTask = [...usersData];
-    const matchingUserIndex = updatedTask.findIndex(
-      (user) => user.userID === choosedUser.user.userID
-    );
-    const matchingTableIndex = updatedTask[matchingUserIndex].tables.findIndex(
-      (table) => table.tableID === choosedUser.table.tableID
-    );
-    const matchingListIndex = updatedTask[matchingUserIndex].tables[
-      matchingTableIndex
+
+    const matchingListIndex = updatedTask[activeUserIndex].tables[
+      activeTableIndex
     ].lists.findIndex((list) => list.id === props.listID);
 
-    const matchingCardIndex = updatedTask[matchingUserIndex].tables[
-      matchingTableIndex
+    const matchingCardIndex = updatedTask[activeUserIndex].tables[
+      activeTableIndex
     ].lists[matchingListIndex].cards.findIndex(
       (card) => card.id === props.cardID
     );
 
-    updatedTask[matchingUserIndex].tables[matchingTableIndex].lists[
+    updatedTask[activeUserIndex].tables[activeTableIndex].lists[
       matchingListIndex
     ].cards[matchingCardIndex].complete = complete;
 
-    // console.log(
-    //   updatedTask[matchingUserIndex].tables[matchingTableIndex].lists[
-    //     matchingListIndex
-    //   ]
-    // );
     setUsersData(updatedTask);
     setComplete(!complete);
   };
@@ -87,7 +85,7 @@ const Card = (props) => {
     >
       <p
         className={`bg-white rounded-md m-2 py-1 pl-2 pr-8 break-words border-2 border-gray-300 ${
-          complete ? `line-through text-gray-400` : null
+          complete ? `line-through text-gray-400 bg-opacity-50` : null
         } `}
         style={{ boxShadow: isDragging ? "0 0 0.5em" : "0px" }}
       >

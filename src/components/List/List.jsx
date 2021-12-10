@@ -9,7 +9,8 @@ const List = (props) => {
   const [value, setValue] = useState("");
   const [active, setActive] = useState(false);
 
-  const { usersData, setUsersData, choosedUser } = useContext(userDataContext);
+  const { activeUserIndex, activeTableIndex, usersData, setUsersData } =
+    useContext(userDataContext);
   const { handleListUpdate } = useContext(handleListUpdateContext);
 
   const handleAddingCard = (listID, cardText) => {
@@ -26,37 +27,36 @@ const List = (props) => {
     };
 
     if (cardText !== "") {
-      choosedUser.table.lists.forEach((item, index) => {
-        if (item.id === listID) {
-          let newArray = [...choosedUser.table.lists];
-          let newCards = choosedUser.table.lists[index].cards.concat([
-            {
-              id: handleCardCounter(item),
-              text: cardText,
-              complete: false,
-            },
-          ]);
+      usersData[activeUserIndex].tables[activeTableIndex].lists.forEach(
+        (item, index) => {
+          if (item.id === listID) {
+            let newArray = [
+              ...usersData[activeUserIndex].tables[activeTableIndex].lists,
+            ];
+            let newCards = usersData[activeUserIndex].tables[
+              activeTableIndex
+            ].lists[index].cards.concat([
+              {
+                id: handleCardCounter(item),
+                text: cardText,
+                complete: false,
+              },
+            ]);
 
-          newArray[index].cards = newCards;
+            newArray[index].cards = newCards;
 
-          handleListUpdate(
-            choosedUser.user.userID,
-            newArray,
-            choosedUser.table.tableID
-          );
+            handleListUpdate(
+              usersData[activeUserIndex].userID,
+              newArray,
+              usersData[activeUserIndex].tables[activeTableIndex].tableID
+            );
+          }
         }
-      });
+      );
     }
   };
 
-  const handleDND = (
-    userID,
-    removingListID,
-    addingListID,
-    cardText,
-    cardID,
-    tableID
-  ) => {
+  const handleDND = (removingListID, addingListID, cardText, cardID) => {
     const handleCardCounter = (list) => {
       let calculatedID = 0;
 
@@ -69,56 +69,45 @@ const List = (props) => {
       return calculatedID;
     };
     const updatedUsersData = [...usersData];
-    usersData.forEach((user, userIndex) => {
-      if (user.userID === userID) {
-        const matchingTableIndex = user.tables.findIndex(
-          (table) => table.tableID === tableID
+
+    const matchingActiveTableIndex = updatedUsersData[
+      activeUserIndex
+    ].tables.findIndex((table) => table.active === true);
+
+    updatedUsersData[activeUserIndex].tables[
+      matchingActiveTableIndex
+    ].lists.forEach((list, listIndex) => {
+      if (list.id === removingListID) {
+        const removingCardIndex = list.cards.findIndex(
+          (card) => card.id === cardID
         );
-        user.tables[matchingTableIndex].lists.forEach((list, listIndex) => {
-          if (list.id === removingListID) {
-            const removingCardIndex = list.cards.findIndex(
-              (card) => card.id === cardID
-            );
-            updatedUsersData[userIndex].tables[matchingTableIndex].lists[
-              listIndex
-            ].cards.splice(removingCardIndex, 1);
-          } else if (list.id === addingListID) {
-            updatedUsersData[userIndex].tables[matchingTableIndex].lists[
-              listIndex
-            ].cards.push({
-              id: handleCardCounter(list),
-              text: cardText,
-            });
-          }
+        updatedUsersData[activeUserIndex].tables[
+          matchingActiveTableIndex
+        ].lists[listIndex].cards.splice(removingCardIndex, 1);
+      } else if (list.id === addingListID) {
+        updatedUsersData[activeUserIndex].tables[
+          matchingActiveTableIndex
+        ].lists[listIndex].cards.push({
+          id: handleCardCounter(list),
+          text: cardText,
         });
       }
     });
-    console.log("userID: " + userID);
+
     console.log("removingListID: " + removingListID);
     console.log("addingListID: " + addingListID);
     console.log("cardText: " + cardText);
     console.log("cardID: " + cardID);
-    console.log("tableID: " + tableID);
-    console.log("choosedUser: ", choosedUser);
+    console.log("user: ", usersData[activeUserIndex].tables);
+    console.log(activeTableIndex);
+    console.log(matchingActiveTableIndex);
     console.log("___________________________");
     setUsersData(updatedUsersData);
   };
 
-  const currentTableID = choosedUser.table.tableID;
-  console.log(currentTableID);
-
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) =>
-      handleDND(
-        choosedUser.user.userID,
-        item.listID,
-        props.list.id,
-        item.text,
-        item.id,
-        // item.tableID
-        currentTableID
-      ),
+    drop: (item) => handleDND(item.listID, props.list.id, item.text, item.id),
     collect: (monitor) => ({
       isOver: !!!monitor.isOver(),
     }),
@@ -145,17 +134,11 @@ const List = (props) => {
           cardID={card.id}
           text={card.text}
           // tableID should be removed?
-          tableID={choosedUser.table.tableID}
+          tableID={usersData[activeUserIndex].tables[activeTableIndex].tableID}
           complete={card.complete}
         />
       );
     });
-    // tableOfCards.forEach((card, index) => {
-    //   if (card.complete === true) {
-    //     console.log("card complete");
-    //     tableOfCards.push(tableOfCards.splice(tableOfCards[index], 1)[0]);
-    //   }
-    // });
     return tableOfCards;
   };
 
@@ -171,9 +154,6 @@ const List = (props) => {
     <div
       className="flex flex-col list-wrapper flex-shrink-0 w-1/5 bg-gray-200 m-2 border-2 border-gray-300 rounded-md p-1"
       ref={drop}
-      onClick={() => {
-        console.log("List choosed user: ", choosedUser);
-      }}
     >
       <ListTitle title={props.list.title} listID={props.listID} />
       <div className="overflow-y-scroll max-h-96">

@@ -12,7 +12,8 @@ import TableSelection from "./TableSelection/TableSelection";
 const UserBoard = () => {
   const [showComponent, setShowComponent] = useState(false);
 
-  const { usersData, setUsersData, choosedUser } = useContext(userDataContext);
+  const { usersData, setUsersData, activeUserIndex, activeTableIndex } =
+    useContext(userDataContext);
 
   const handleListUpdate = (userID, newLists, tableID) => {
     const stateCopy = [...usersData];
@@ -30,9 +31,11 @@ const UserBoard = () => {
 
   const handleLists = () => {
     const tableOfLists = [];
-    choosedUser.table.lists.forEach((item) => {
-      tableOfLists.push(<List key={item.id} list={item} />);
-    });
+    usersData[activeUserIndex].tables[activeTableIndex].lists.forEach(
+      (item) => {
+        tableOfLists.push(<List key={item.id} list={item} />);
+      }
+    );
     return tableOfLists;
   };
 

@@ -5,29 +5,32 @@ import userDataContext from "../../context/userDataContext";
 const ListTitleForm = (props) => {
   const [title, setTitle] = useState("");
 
-  const { choosedUser } = useContext(userDataContext);
+  const { activeUserIndex, activeTableIndex, usersData } =
+    useContext(userDataContext);
   const { handleListUpdate } = useContext(handleListUpdateContext);
 
   const handleAddingList = (title) => {
     const handleListCounter = () => {
       let calculatedID = 0;
-      choosedUser.table.lists.forEach((list) => {
-        if (list.id >= calculatedID) {
-          calculatedID = list.id + 1;
+      usersData[activeUserIndex].tables[activeTableIndex].lists.forEach(
+        (list) => {
+          if (list.id >= calculatedID) {
+            calculatedID = list.id + 1;
+          }
         }
-      });
+      );
       return calculatedID;
     };
 
     if (title !== "") {
       const newList = [
-        ...choosedUser.table.lists,
+        ...usersData[activeUserIndex].tables[activeTableIndex].lists,
         { title: title, id: handleListCounter(), cards: [] },
       ];
       handleListUpdate(
-        choosedUser.user.userID,
+        usersData[activeUserIndex].userID,
         newList,
-        choosedUser.table.tableID
+        usersData[activeUserIndex].tables[activeTableIndex].tableID
       );
     }
   };
