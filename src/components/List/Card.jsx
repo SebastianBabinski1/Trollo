@@ -18,7 +18,6 @@ const Card = (props) => {
   }));
 
   const [hover, setHover] = useState(false);
-  const [complete, setComplete] = useState(false);
   const {
     activeUserIndex,
     activeTableIndex,
@@ -69,10 +68,9 @@ const Card = (props) => {
 
     updatedTask[activeUserIndex].tables[activeTableIndex].lists[
       matchingListIndex
-    ].cards[matchingCardIndex].complete = complete;
+    ].cards[matchingCardIndex].complete = !props.complete;
 
     setUsersData(updatedTask);
-    setComplete(!complete);
   };
 
   return (
@@ -81,11 +79,10 @@ const Card = (props) => {
       ref={drag}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      onClick={() => console.log("card choosed user: ", choosedUser)}
     >
       <p
         className={`bg-white rounded-md m-2 py-1 pl-2 pr-8 break-words border-2 border-gray-300 ${
-          complete ? `line-through text-gray-400 bg-opacity-50` : null
+          props.complete ? `line-through text-gray-400 bg-opacity-50` : null
         } `}
         style={{ boxShadow: isDragging ? "0 0 0.5em" : "0px" }}
       >
@@ -95,7 +92,7 @@ const Card = (props) => {
         className={`absolute right-12 top-2 ${hover ? "visible" : "hidden"}`}
         onClick={() => handleCompleteTask()}
       >
-        {complete ? (
+        {props.complete ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4"

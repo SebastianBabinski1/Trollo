@@ -42,7 +42,6 @@ const List = (props) => {
                 complete: false,
               },
             ]);
-
             newArray[index].cards = newCards;
 
             handleListUpdate(
@@ -94,14 +93,6 @@ const List = (props) => {
       }
     });
 
-    console.log("removingListID: " + removingListID);
-    console.log("addingListID: " + addingListID);
-    console.log("cardText: " + cardText);
-    console.log("cardID: " + cardID);
-    console.log("user: ", usersData[activeUserIndex].tables);
-    console.log(activeTableIndex);
-    console.log(matchingActiveTableIndex);
-    console.log("___________________________");
     setUsersData(updatedUsersData);
   };
 
@@ -123,21 +114,36 @@ const List = (props) => {
     event.preventDefault();
   };
 
-  // Somethings wrong here
   const handleCardsRendering = (cards) => {
     const tableOfCards = [];
     cards.forEach((card) => {
-      tableOfCards.push(
-        <Card
-          key={card.id}
-          listID={props.list.id}
-          cardID={card.id}
-          text={card.text}
-          // tableID should be removed?
-          tableID={usersData[activeUserIndex].tables[activeTableIndex].tableID}
-          complete={card.complete}
-        />
-      );
+      if (card.complete === false) {
+        tableOfCards.unshift(
+          <Card
+            key={card.id}
+            listID={props.list.id}
+            cardID={card.id}
+            text={card.text}
+            tableID={
+              usersData[activeUserIndex].tables[activeTableIndex].tableID
+            }
+            complete={card.complete}
+          />
+        );
+      } else {
+        tableOfCards.push(
+          <Card
+            key={card.id}
+            listID={props.list.id}
+            cardID={card.id}
+            text={card.text}
+            tableID={
+              usersData[activeUserIndex].tables[activeTableIndex].tableID
+            }
+            complete={card.complete}
+          />
+        );
+      }
     });
     return tableOfCards;
   };

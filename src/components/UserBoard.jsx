@@ -25,7 +25,6 @@ const UserBoard = () => {
       (table) => table.tableID === tableID
     );
     stateCopy[matchingUserIndex].tables[matchingTableIndex].lists = newLists;
-
     setUsersData(stateCopy);
   };
 

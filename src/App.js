@@ -3,6 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import userDataContext from "./context/userDataContext";
 import UserBoard from "./components/UserBoard";
 import UserSelection from "./components/UserSelection/UserSelection";
+import Page404 from "./components/Page404/Page404";
 
 const App = () => {
   const [choosedUser, setChoosedUser] = useState(false);
@@ -66,11 +67,11 @@ const App = () => {
       <userDataContext.Provider
         value={{
           usersData,
-          setUsersData,
           choosedUser,
-          setChoosedUser,
           activeUserIndex,
           activeTableIndex,
+          setUsersData,
+          setChoosedUser,
         }}
       >
         <div className="App h-screen bg-mountains bg-center bg-cover flex flex-col">
@@ -82,14 +83,7 @@ const App = () => {
                 element={<UserBoard key={usersData[activeUserIndex].userID} />}
               />
             ) : null}
-            <Route
-              path="*"
-              element={
-                <Link className="text-white" to="/">
-                  404! Click here and back to home
-                </Link>
-              }
-            />
+            <Route path="*" element={<Page404 />} />
           </Routes>
         </div>
       </userDataContext.Provider>

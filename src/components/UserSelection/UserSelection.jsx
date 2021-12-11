@@ -4,6 +4,7 @@ import Navbar from "../Navbar";
 import UserRegister from "../UserRegister";
 import Footer from "../Footer";
 import User from "./User";
+import Steps from "../Steps/Steps";
 
 const UserSelection = () => {
   const { usersData } = useContext(userDataContext);
@@ -22,10 +23,16 @@ const UserSelection = () => {
       <Navbar />
       <div className="flex flex-grow">
         <div className="bg-black w-1/6 bg-opacity-50 flex flex-col">
-          <p className="flex justify-center text-white">Choose user:</p>
-          <div className="flex flex-col rounded-md bg-white p-1">
-            {handleUserSelection()}
-          </div>
+          {usersData.length > 0 ? (
+            <>
+              <p className="flex justify-center text-white">Choose user:</p>
+              <div className="flex flex-col rounded-md bg-white p-1">
+                {handleUserSelection()}
+              </div>
+            </>
+          ) : (
+            <Steps />
+          )}
         </div>
         <div className=" w-full">
           <p className="text-white text-6xl  text-right my-16 mr-6">
