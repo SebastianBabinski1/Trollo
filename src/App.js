@@ -17,16 +17,16 @@ const App = () => {
       tables: [
         {
           tableID: 0,
-          tableName: "Table 1",
+          tableName: "Monday",
           active: false,
           lists: [
             {
-              title: "First list in first table",
+              title: "To do",
               id: 0,
               cards: [],
             },
             {
-              title: "blabla",
+              title: "Development",
               id: 1,
               cards: [],
             },
@@ -34,16 +34,16 @@ const App = () => {
         },
         {
           tableID: 1,
-          tableName: "Table 2",
+          tableName: "Tuesday",
           active: false,
           lists: [
             {
-              title: "First list in second table",
+              title: "To do",
               id: 0,
               cards: [],
             },
             {
-              title: "ho",
+              title: "Development",
               id: 1,
               cards: [],
             },
