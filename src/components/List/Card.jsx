@@ -18,13 +18,8 @@ const Card = (props) => {
   }));
 
   const [hover, setHover] = useState(false);
-  const {
-    activeUserIndex,
-    activeTableIndex,
-    choosedUser,
-    usersData,
-    setUsersData,
-  } = useContext(userDataContext);
+  const { activeUserIndex, activeTableIndex, usersData, setUsersData } =
+    useContext(userDataContext);
   const { handleListUpdate } = useContext(handleListUpdateContext);
 
   const handleRemovingCard = (cardID, listID) => {

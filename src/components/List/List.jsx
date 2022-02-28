@@ -105,6 +105,7 @@ const List = (props) => {
   }));
 
   const handleChange = (event) => {
+    console.log(props);
     setValue(event.target.value);
   };
 
@@ -161,7 +162,7 @@ const List = (props) => {
       className="flex flex-col list-wrapper flex-shrink-0 w-1/5 bg-gray-200 m-2 border-2 border-gray-300 rounded-md p-1"
       ref={drop}
     >
-      <ListTitle title={props.list.title} listID={props.listID} />
+      <ListTitle title={props.list.title} listID={props.list.id} />
       <div className="overflow-y-scroll max-h-96">
         {handleCardsRendering(props.list.cards)}
       </div>

@@ -6,14 +6,8 @@ const TableSelection = () => {
   const [value, setValue] = useState("");
   const [active, setActive] = useState(true);
   const [addingTable, setAddingTable] = useState(false);
-  const {
-    activeUserIndex,
-    activeTableIndex,
-    choosedUser,
-    setChoosedUser,
-    usersData,
-    setUsersData,
-  } = useContext(userDataContext);
+  const { activeUserIndex, activeTableIndex, usersData, setUsersData } =
+    useContext(userDataContext);
 
   const handleTableChange = (newTableID) => {
     const dataCopy = [...usersData];

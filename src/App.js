@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import userDataContext from "./context/userDataContext";
 import UserBoard from "./components/UserBoard";
 import UserSelection from "./components/UserSelection/UserSelection";
