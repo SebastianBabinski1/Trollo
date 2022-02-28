@@ -1,170 +1,93 @@
 import React, { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import userDataContext from "./context/userDataContext";
 import UserBoard from "./components/UserBoard";
-import UserSelection from "./components/UserSelection";
+import UserSelection from "./components/UserSelection/UserSelection";
+import Page404 from "./components/Page404/Page404";
 
 const App = () => {
-  const [userSelection, setUserSelection] = useState(true);
-  const [choosedUser, setChoosedUser] = useState();
+  const [choosedUser, setChoosedUser] = useState(false);
 
   const [usersData, setUsersData] = useState([
     {
       userID: 0,
       name: "Henry",
       avatar: "https://www.svgrepo.com/show/125/car.svg",
-      lists: [
+      active: false,
+      tables: [
         {
-          title: "First User",
-          id: 0,
-          cards: [],
+          tableID: 0,
+          tableName: "Table 1",
+          active: false,
+          lists: [
+            {
+              title: "First list in first table",
+              id: 0,
+              cards: [],
+            },
+            {
+              title: "blabla",
+              id: 1,
+              cards: [],
+            },
+          ],
         },
         {
-          title: "Something",
-          id: 1,
-          cards: [],
-        },
-      ],
-    },
-    {
-      userID: 1,
-      name: "Martin",
-      avatar: "https://www.svgrepo.com/show/20920/man.svg",
-      lists: [
-        {
-          title: "Second User",
-          id: 0,
-          cards: [],
-        },
-        {
-          title: "Something",
-          id: 1,
-          cards: [],
+          tableID: 1,
+          tableName: "Table 2",
+          active: false,
+          lists: [
+            {
+              title: "First list in second table",
+              id: 0,
+              cards: [],
+            },
+            {
+              title: "ho",
+              id: 1,
+              cards: [],
+            },
+          ],
         },
       ],
     },
   ]);
 
-  let busyID = 0;
-  const handleID = (busyID) => {
-    usersData.forEach((user) => {
-      if (user.userID >= busyID) {
-        busyID = user.userID;
-      }
-    });
-    return busyID;
-  };
-
-  const handleRemovingUser = (userID) => {
-    const usersDataCopy = [...usersData];
-    const matchingUsersDataIndex = usersDataCopy.findIndex(
-      (item) => item.userID === userID
+  let activeUserIndex = undefined;
+  let activeTableIndex = undefined;
+  if (choosedUser === true) {
+    activeUserIndex = usersData.findIndex((user) => user.active === true);
+    activeTableIndex = usersData[activeUserIndex].tables.findIndex(
+      (table) => table.active === true
     );
-    usersDataCopy.splice(matchingUsersDataIndex, 1);
-    setUsersData(usersDataCopy);
-  };
-
-  const handleListUpdate = (userID, newLists) => {
-    const stateCopy = [...usersData];
-    const matchingIndex = stateCopy.findIndex((item) => item.userID === userID);
-
-    stateCopy[matchingIndex].lists = newLists;
-
-    setUsersData(stateCopy);
-  };
-
-  const handleDND = (
-    userID,
-    removingListID,
-    addingListID,
-    cardText,
-    cardID
-  ) => {
-    const handleCardCounter = (list) => {
-      let calculatedID = 0;
-
-      list.cards.forEach((card) => {
-        if (card.id >= calculatedID) {
-          calculatedID = card.id + 1;
-        }
-      });
-
-      return calculatedID;
-    };
-    const updatedUsersData = [...usersData];
-    usersData.forEach((user, userIndex) => {
-      if (user.userID === userID) {
-        user.lists.forEach((list, listIndex) => {
-          if (list.id === removingListID) {
-            const removingCardIndex = list.cards.findIndex(
-              (card) => card.id === cardID
-            );
-            updatedUsersData[userIndex].lists[listIndex].cards.splice(
-              removingCardIndex,
-              1
-            );
-          } else if (list.id === addingListID) {
-            updatedUsersData[userIndex].lists[listIndex].cards.push({
-              id: handleCardCounter(list),
-              text: cardText,
-            });
-          }
-        });
-      }
-    });
-    setUsersData(updatedUsersData);
-  };
-
-  const updateUsers = (newUser, avatar) => {
-    const newID = handleID(busyID) + 1;
-    console.log(newID);
-    setUsersData((prevState) => [
-      ...prevState,
-      { userID: newID, name: newUser, avatar: avatar, lists: [] },
-    ]);
-  };
-
-  const handleSelectedUser = () => {
-    let userContent = {};
-    usersData.forEach((user) => {
-      if (user.userID === choosedUser.userID) {
-        userContent = user;
-      }
-    });
-
-    const selectedUser = [];
-    usersData.forEach((user) => {
-      if (user.userID === choosedUser.userID) {
-        selectedUser.push(
-          <UserBoard
-            key={user.userID}
-            users={usersData}
-            setChoosedUser={setChoosedUser}
-            setUserSelection={setUserSelection}
-            userContent={userContent}
-            handleDND={handleDND}
-            userID={user.userID}
-            handleListUpdate={handleListUpdate}
-            lists={user.lists}
-          />
-        );
-      }
-    });
-    return selectedUser;
-  };
+  }
 
   return (
-    <div className="h-screen bg-mountains bg-center bg-cover flex flex-col">
-      {userSelection ? (
-        <UserSelection
-          setChoosedUser={setChoosedUser}
-          setUserSelection={setUserSelection}
-          updateUsers={updateUsers}
-          users={usersData}
-          handleRemovingUser={handleRemovingUser}
-        />
-      ) : (
-        handleSelectedUser()
-      )}
-    </div>
+    <>
+      <userDataContext.Provider
+        value={{
+          usersData,
+          choosedUser,
+          activeUserIndex,
+          activeTableIndex,
+          setUsersData,
+          setChoosedUser,
+        }}
+      >
+        <div className="App h-screen bg-mountains bg-center bg-cover flex flex-col">
+          <Routes>
+            <Route path="/" element={<UserSelection />} />
+            {choosedUser ? (
+              <Route
+                path={usersData[activeUserIndex].name}
+                element={<UserBoard key={usersData[activeUserIndex].userID} />}
+              />
+            ) : null}
+            <Route path="*" element={<Page404 />} />
+          </Routes>
+        </div>
+      </userDataContext.Provider>
+    </>
   );
 };
 

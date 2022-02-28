@@ -1,49 +1,150 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import userDataContext from "../../context/userDataContext";
 import ListTitle from "./ListTitle";
 import Card from "./Card";
 import { useDrop } from "react-dnd";
+import handleListUpdateContext from "../../context/handleListUpdateContext";
 
 const List = (props) => {
   const [value, setValue] = useState("");
   const [active, setActive] = useState(false);
 
+  const { activeUserIndex, activeTableIndex, usersData, setUsersData } =
+    useContext(userDataContext);
+  const { handleListUpdate } = useContext(handleListUpdateContext);
+
+  const handleAddingCard = (listID, cardText) => {
+    const handleCardCounter = (list) => {
+      let calculatedID = 0;
+
+      list.cards.forEach((card) => {
+        if (card.id >= calculatedID) {
+          calculatedID = card.id + 1;
+        }
+      });
+
+      return calculatedID;
+    };
+
+    if (cardText !== "") {
+      usersData[activeUserIndex].tables[activeTableIndex].lists.forEach(
+        (item, index) => {
+          if (item.id === listID) {
+            let newArray = [
+              ...usersData[activeUserIndex].tables[activeTableIndex].lists,
+            ];
+            let newCards = usersData[activeUserIndex].tables[
+              activeTableIndex
+            ].lists[index].cards.concat([
+              {
+                id: handleCardCounter(item),
+                text: cardText,
+                complete: false,
+              },
+            ]);
+            newArray[index].cards = newCards;
+
+            handleListUpdate(
+              usersData[activeUserIndex].userID,
+              newArray,
+              usersData[activeUserIndex].tables[activeTableIndex].tableID
+            );
+          }
+        }
+      );
+    }
+  };
+
+  const handleDND = (removingListID, addingListID, cardText, cardID) => {
+    const handleCardCounter = (list) => {
+      let calculatedID = 0;
+
+      list.cards.forEach((card) => {
+        if (card.id >= calculatedID) {
+          calculatedID = card.id + 1;
+        }
+      });
+
+      return calculatedID;
+    };
+    const updatedUsersData = [...usersData];
+
+    const matchingActiveTableIndex = updatedUsersData[
+      activeUserIndex
+    ].tables.findIndex((table) => table.active === true);
+
+    updatedUsersData[activeUserIndex].tables[
+      matchingActiveTableIndex
+    ].lists.forEach((list, listIndex) => {
+      if (list.id === removingListID) {
+        const removingCardIndex = list.cards.findIndex(
+          (card) => card.id === cardID
+        );
+        updatedUsersData[activeUserIndex].tables[
+          matchingActiveTableIndex
+        ].lists[listIndex].cards.splice(removingCardIndex, 1);
+      } else if (list.id === addingListID) {
+        updatedUsersData[activeUserIndex].tables[
+          matchingActiveTableIndex
+        ].lists[listIndex].cards.push({
+          id: handleCardCounter(list),
+          text: cardText,
+        });
+      }
+    });
+
+    setUsersData(updatedUsersData);
+  };
+
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) =>
-      props.handleDND(
-        props.userID,
-        item.listID,
-        props.listID,
-        item.text,
-        item.id
-      ),
+    drop: (item) => handleDND(item.listID, props.list.id, item.text, item.id),
     collect: (monitor) => ({
       isOver: !!!monitor.isOver(),
     }),
   }));
 
   const handleChange = (event) => {
+    console.log(props);
     setValue(event.target.value);
   };
 
   const handleSubmit = (event) => {
-    props.handleAddingCard(props.listID, value);
+    handleAddingCard(props.list.id, value);
     setValue("");
     event.preventDefault();
   };
 
   const handleCardsRendering = (cards) => {
     const tableOfCards = [];
-    cards.forEach((item) => {
-      tableOfCards.push(
-        <Card
-          key={item.id}
-          handleRemovingCard={props.handleRemovingCard}
-          listID={props.listID}
-          cardID={item.id}
-          text={item.text}
-        />
-      );
+    cards.forEach((card) => {
+      if (card.complete === false) {
+        tableOfCards.unshift(
+          <Card
+            key={card.id}
+            listID={props.list.id}
+            cardID={card.id}
+            text={card.text}
+            tableID={
+              usersData[activeUserIndex].tables[activeTableIndex].tableID
+            }
+            complete={card.complete}
+          />
+        );
+      } else {
+        tableOfCards.push(
+          <Card
+            key={card.id}
+            listID={props.list.id}
+            cardID={card.id}
+            text={card.text}
+            tableID={
+              usersData[activeUserIndex].tables[activeTableIndex].tableID
+            }
+            complete={card.complete}
+          />
+        );
+      }
     });
     return tableOfCards;
   };
@@ -61,13 +162,9 @@ const List = (props) => {
       className="flex flex-col list-wrapper flex-shrink-0 w-1/5 bg-gray-200 m-2 border-2 border-gray-300 rounded-md p-1"
       ref={drop}
     >
-      <ListTitle
-        title={props.title}
-        handleRemovingList={props.handleRemovingList}
-        listID={props.listID}
-      />
+      <ListTitle title={props.list.title} listID={props.list.id} />
       <div className="overflow-y-scroll max-h-96">
-        {handleCardsRendering(props.cards)}
+        {handleCardsRendering(props.list.cards)}
       </div>
       {active ? (
         <form
