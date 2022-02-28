@@ -105,7 +105,6 @@ const List = (props) => {
   }));
 
   const handleChange = (event) => {
-    console.log(props);
     setValue(event.target.value);
   };
 
